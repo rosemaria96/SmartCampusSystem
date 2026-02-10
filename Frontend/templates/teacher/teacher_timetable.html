@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Teacher Timetable | Cruz Horizon{% endblock %}
+{% block portal_name %}Teacher Portal{% endblock %}
+
+{% block sidebar %}
+{% include 'partials/sidebar_teacher.html' %}
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
+    <div>
+        <h2 class="fw-bold mb-1">My Timetable</h2>
+        <p class="text-white-50">View your weekly schedule</p>
+    </div>
+    <div class="d-flex gap-2">
+        <button class="btn btn-light bg-white border"><i class="bi bi-calendar3 me-2"></i>This Week</button>
+        <button class="btn btn-black"><i class="bi bi-download me-2"></i>Export PDF</button>
+    </div>
+</div>
+
+<!-- Timetable Section -->
+<div class="content-card mb-4">
+    <div class="table-responsive">
+        <table class="table table-bordered text-center align-middle">
+            <thead class="fw-bold">
+                <tr>
+                    <th style="width: 100px;">Time</th>
+                    <th>Monday</th>
+                    <th>Tuesday</th>
+                    <th>Wednesday</th>
+                    <th>Thursday</th>
+                    <th>Friday</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="fw-bold text-secondary">9:00 AM</td>
+                    <td>
+                        <div class="subject-card p-2 rounded bg-primary bg-opacity-10">
+                            <div class="fw-bold small">Mathematics</div>
+                            <div class="small text-muted">Room 201</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="subject-card p-2 rounded bg-success bg-opacity-10">
+                            <div class="fw-bold small">Physics</div>
+                            <div class="small text-muted">Lab 2</div>
+                        </div>
+                    </td>
+                    <td>-</td>
+                    <td>
+                        <div class="subject-card p-2 rounded bg-primary bg-opacity-10">
+                            <div class="fw-bold small">Mathematics</div>
+                            <div class="small text-muted">Room 201</div>
+                        </div>
+                    </td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td class="fw-bold text-secondary">10:00 AM</td>
+                    <td>-</td>
+                    <td>
+                        <div class="subject-card p-2 rounded bg-info bg-opacity-10">
+                            <div class="fw-bold small">History</div>
+                            <div class="small text-muted">Room 302</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="subject-card p-2 rounded bg-primary bg-opacity-10">
+                            <div class="fw-bold small">Mathematics</div>
+                            <div class="small text-muted">Room 201</div>
+                        </div>
+                    </td>
+                    <td>-</td>
+                    <td>
+                        <div class="subject-card p-2 rounded bg-success bg-opacity-10">
+                            <div class="fw-bold small">Physics</div>
+                            <div class="small text-muted">Lab 2</div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Swap Request -->
+<div class="content-card">
+    <h5 class="fw-bold mb-3">Request Period Swap</h5>
+    <p class="text-muted mb-3">Need to swap a period with another teacher? Submit a request here.</p>
+    <button class="btn btn-black">Create Swap Request</button>
+</div>
+{% endblock %}

@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Teacher Notifications | Cruz Horizon{% endblock %}
+{% block portal_name %}Teacher Portal{% endblock %}
+
+{% block extra_head %}
+<style>
+    .stat-icon-circle {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        margin-right: 15px;
+    }
+
+    .noti-stat-card {
+        background: #fff;
+        padding: 20px;
+        border-radius: 16px;
+        border: 1px solid #e2e8f0;
+        display: flex;
+        align-items: center;
+    }
+
+    body:not(.light-mode) .noti-stat-card {
+        background: #111827;
+        border-color: #1f2937;
+    }
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'partials/sidebar_teacher.html' %}
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
+    <div>
+        <h2 class="fw-bold mb-1">Notifications</h2>
+        <p class="text-white-50">Stay updated with latest announcements</p>
+    </div>
+    <div>
+        <button class="btn btn-light bg-white border">Mark All as Read</button>
+    </div>
+</div>
+
+<!-- Summary Stats -->
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+        <div class="noti-stat-card">
+            <div class="stat-icon-circle" style="background-color: #eff6ff; color: #3b82f6;">
+                <i class="bi bi-bell"></i>
+            </div>
+            <div>
+                <h4 class="fw-bold mb-0">12</h4>
+                <div class="text-muted small">Unread</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="noti-stat-card">
+            <div class="stat-icon-circle" style="background-color: #f0fdf4; color: #22c55e;">
+                <i class="bi bi-calendar-check"></i>
+            </div>
+            <div>
+                <h4 class="fw-bold mb-0">3</h4>
+                <div class="text-muted small">Events</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Notifications List -->
+<div class="content-card">
+    <h5 class="fw-bold mb-4">All Notifications</h5>
+    <div class="notification-item unread mb-3 p-3 border rounded">
+        <div class="d-flex justify-content-between align-items-start">
+            <div class="fw-bold">Mid-term Exam Schedule Released</div>
+            <span class="badge bg-info text-white">info</span>
+        </div>
+        <div class="text-muted small mb-2">2 hours ago</div>
+        <div>The mid-term exam schedule has been published. Please check your timetable.</div>
+    </div>
+    <div class="notification-item unread p-3 border rounded">
+        <div class="d-flex justify-content-between align-items-start">
+            <div class="fw-bold">Holiday Notice</div>
+            <span class="badge bg-danger text-white">alert</span>
+        </div>
+        <div class="text-muted small mb-2">5 hours ago</div>
+        <div>Campus will be closed on Jan 26 for Republic Day.</div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Notifications | Cruz Horizon{% endblock %}
+{% block portal_name %}Student Portal{% endblock %}
+
+{% block sidebar %}
+{% include 'partials/sidebar_student.html' %}
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-end mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">Notifications</h2>
+        <p class="text-white-50">Stay updated with latest announcements</p>
+    </div>
+</div>
+
+<!-- Notifications List -->
+<div class="content-card">
+    <h5 class="fw-bold mb-4">Unread</h5>
+    <div class="notification-item unread mb-3 p-3 border rounded">
+        <div class="fw-bold">Mid-term Results Published</div>
+        <div class="text-muted small">2 hours ago</div>
+        <div class="mt-2">Your results for the midterm examinations have been published online.</div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Academic Performance | Cruz Horizon{% endblock %}
+{% block portal_name %}Student Portal{% endblock %}
+
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'partials/sidebar_student.html' %}
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-end mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">Academic Performance</h2>
+        <p class="text-white-50">View your marks and academic progress</p>
+    </div>
+    <div>
+        <button class="btn btn-outline-light">
+            <i class="bi bi-download me-2"></i>Download Report Card
+        </button>
+    </div>
+</div>
+
+<!-- Stats Row -->
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="stat-card d-flex justify-content-between align-items-start">
+            <div>
+                <p class="text-muted mb-1 fs-6">Current GPA</p>
+                <h3 class="fw-bold mb-1">3.8</h3>
+                <small class="text-success"><i class="bi bi-graph-up-arrow"></i> Top 5% of class</small>
+            </div>
+            <div class="icon-box bg-warning-subtle text-warning rounded p-2">
+                <i class="bi bi-award-fill fs-4"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card d-flex justify-content-between align-items-start">
+            <div>
+                <p class="text-muted mb-1 fs-6">Class Rank</p>
+                <h3 class="fw-bold mb-1">5th</h3>
+                <small class="text-primary"><i class="bi bi-people-fill"></i> Out of 120 students</small>
+            </div>
+            <div class="icon-box bg-primary-subtle text-primary rounded p-2">
+                <i class="bi bi-book fs-4"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card d-flex justify-content-between align-items-start">
+            <div>
+                <p class="text-muted mb-1 fs-6">Total Credits</p>
+                <h3 class="fw-bold mb-1">128</h3>
+                <small class="text-success"><i class="bi bi-check-circle-fill"></i> On track to graduate</small>
+            </div>
+            <div class="icon-box bg-info-subtle text-info rounded p-2">
+                <i class="bi bi-patch-check fs-4"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row -->
+<div class="row g-4 mb-4">
+    <div class="col-md-6">
+        <div class="content-card h-100">
+            <h5 class="fw-bold mb-4">Subject-wise Performance</h5>
+            <div class="d-flex justify-content-center w-100">
+                <div style="max-height: 300px; max-width: 300px; width: 100%;">
+                    <canvas id="radarChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="content-card h-100">
+            <h5 class="fw-bold mb-4">Grade Distribution</h5>
+            <div class="mb-4">
+                <div class="d-flex justify-content-between mb-1">
+                    <span class="small">A Grade</span>
+                    <span class="fw-bold small">3 subjects</span>
+                </div>
+                <div class="progress" style="height: 6px;">
+                    <div class="progress-bar bg-black" style="width: 60%"></div>
+                </div>
+            </div>
+            <div class="mb-4">
+                <div class="d-flex justify-content-between mb-1">
+                    <span class="small">B+ Grade</span>
+                    <span class="fw-bold small">2 subjects</span>
+                </div>
+                <div class="progress" style="height: 6px;">
+                    <div class="progress-bar bg-black" style="width: 40%"></div>
+                </div>
+            </div>
+            <div class="mb-4">
+                <div class="d-flex justify-content-between mb-1">
+                    <span class="small">B Grade</span>
+                    <span class="fw-bold small">0 subjects</span>
+                </div>
+                <div class="progress" style="height: 6px;">
+                    <div class="progress-bar bg-black" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Detailed Marks Table -->
+<div class="content-card mb-4">
+    <h5 class="fw-bold mb-4">Detailed Marks</h5>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle custom-table">
+            <thead>
+                <tr class="border-bottom">
+                    <th scope="col" class="text-muted small text-uppercase ps-3">Subject</th>
+                    <th scope="col" class="text-muted small text-uppercase">Midterm (100)</th>
+                    <th scope="col" class="text-muted small text-uppercase">Final (100)</th>
+                    <th scope="col" class="text-muted small text-uppercase">Total (200)</th>
+                    <th scope="col" class="text-muted small text-uppercase text-end">Grade</th>
+                </tr>
+            </thead>
+            <tbody class="border-top-0">
+                <tr>
+                    <td class="ps-3 fw-bold">Mathematics</td>
+                    <td>85</td>
+                    <td>92</td>
+                    <td>177</td>
+                    <td class="text-end"><span class="badge bg-black text-white rounded-pill px-3">A</span></td>
+                </tr>
+                <tr>
+                    <td class="ps-3 fw-bold">Physics</td>
+                    <td>78</td>
+                    <td>82</td>
+                    <td>160</td>
+                    <td class="text-end"><span class="badge bg-light text-dark border rounded-pill px-3">B+</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const ctx = document.getElementById('radarChart').getContext('2d');
+    const getChartColors = () => {
+        const isLight = document.body.classList.contains('light-mode');
+        return {
+            gridColor: isLight ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.1)',
+            textColor: isLight ? '#64748b' : '#cbd5e1',
+            tickColor: isLight ? '#94a3b8' : '#94a3b8'
+        };
+    };
+    const initialColors = getChartColors();
+    const radarChart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: ['Math', 'Physics', 'Chemistry', 'English', 'History'],
+            datasets: [{
+                label: 'Performance',
+                data: [92, 82, 88, 90, 85],
+                fill: true,
+                backgroundColor: 'rgba(59, 130, 246, 0.5)',
+                borderColor: 'rgb(59, 130, 246)',
+                pointBackgroundColor: 'rgb(59, 130, 246)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgb(59, 130, 246)'
+            }]
+        },
+        options: {
+            elements: { line: { borderWidth: 2 } },
+            scales: {
+                r: {
+                    angleLines: { color: initialColors.gridColor },
+                    grid: { color: initialColors.gridColor },
+                    pointLabels: { color: initialColors.textColor },
+                    ticks: { backdropColor: 'transparent', color: initialColors.tickColor }
+                }
+            },
+            plugins: { legend: { display: false } }
+        }
+    });
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                const colors = getChartColors();
+                radarChart.options.scales.r.angleLines.color = colors.gridColor;
+                radarChart.options.scales.r.grid.color = colors.gridColor;
+                radarChart.options.scales.r.pointLabels.color = colors.textColor;
+                radarChart.options.scales.r.ticks.color = colors.tickColor;
+                radarChart.update();
+            }
+        });
+    });
+    observer.observe(document.body, { attributes: true });
+</script>
+{% endblock %}

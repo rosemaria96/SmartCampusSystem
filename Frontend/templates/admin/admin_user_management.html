@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}User Management | Cruz Horizon{% endblock %}
+{% block portal_name %}Admin Portal{% endblock %}
+
+{% block sidebar %}
+{% include 'partials/sidebar_admin.html' %}
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
+    <div>
+        <h2 class="fw-bold mb-1">User Management</h2>
+        <p class="text-white-50">Manage students, teachers, and administrators</p>
+    </div>
+    <div>
+        <button class="btn btn-black"><i class="bi bi-person-plus-fill me-2"></i>Add User</button>
+    </div>
+</div>
+
+<!-- Stats Grid -->
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+        <div class="stat-card admin-card p-3 rounded-3 d-flex justify-content-between align-items-center">
+            <div>
+                <div class="text-muted small mb-1">Total Students</div>
+                <h3 class="fw-bold mb-1">{{ total_students }}</h3>
+            </div>
+            <div class="stat-icon-wrapper" style="background-color: #eff6ff; color: #3b82f6;">
+                <i class="bi bi-people"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="stat-card admin-card p-3 rounded-3 d-flex justify-content-between align-items-center">
+            <div>
+                <div class="text-muted small mb-1">Teachers</div>
+                <h3 class="fw-bold mb-1">{{ total_teachers }}</h3>
+            </div>
+            <div class="stat-icon-wrapper" style="background-color: #fcf4ff; color: #a855f7;">
+                <i class="bi bi-person-badge"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- All Users Table -->
+<div class="content-card mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <h5 class="fw-bold mb-0">All Users</h5>
+        <div class="d-flex gap-2">
+            <div class="input-group admin-search-box" style="width: 250px;">
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                <input type="text" class="form-control" placeholder="Search users...">
+            </div>
+            <select class="form-select custom-input" style="width: 150px;">
+                <option selected>All Roles</option>
+                <option>Student</option>
+                <option>Teacher</option>
+                <option>Admin</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table custom-table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Status</th>
+                    <th scope="col" class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Mock data for now, ideally this would be loop through users -->
+                <tr>
+                    <td class="fw-bold">{{ user.username }} (You)</td>
+                    <td class="text-muted">{{ user.email }}</td>
+                    <td><span class="badge badge-role-admin">admin</span></td>
+                    <td><span class="badge badge-status-active rounded-pill">Active</span></td>
+                    <td class="text-end">
+                        <button class="btn btn-link action-btn-color p-1"><i class="bi bi-pencil-square"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

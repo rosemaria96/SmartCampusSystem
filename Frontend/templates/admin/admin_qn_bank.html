@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Question Bank Management | Cruz Horizon{% endblock %}
+{% block portal_name %}Admin Portal{% endblock %}
+
+{% block sidebar %}
+{% include 'partials/sidebar_admin.html' %}
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-end mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">Question Bank</h2>
+        <p class="text-white-50">Review and approve question papers</p>
+    </div>
+</div>
+
+<!-- Pending Approval -->
+<div class="content-card">
+    <h5 class="fw-bold mb-4">Pending Approval</h5>
+    <div class="d-flex justify-content-between align-items-center p-3 border rounded mb-2">
+        <div>
+            <div class="fw-bold">Physics Quiz 3</div>
+            <div class="text-muted small">Teacher: Dr. Smith • Grade 10</div>
+        </div>
+        <div>
+            <button class="btn btn-sm btn-success">Approve</button>
+            <button class="btn btn-sm btn-danger">Reject</button>
+        </div>
+    </div>
+</div>
+{% endblock %}

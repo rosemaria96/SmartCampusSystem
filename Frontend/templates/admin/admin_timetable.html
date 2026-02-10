@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Admin Timetable | Cruz Horizon{% endblock %}
+{% block portal_name %}Admin Portal{% endblock %}
+
+{% block sidebar %}
+{% include 'partials/sidebar_admin.html' %}
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
+    <div>
+        <h2 class="fw-bold mb-1">Master Timetable</h2>
+        <p class="text-white-50">Manage and publish timetables</p>
+    </div>
+    <div>
+        <button class="btn btn-outline-secondary me-2"><i class="bi bi-calendar me-2"></i>This Week</button>
+        <button class="btn btn-black"><i class="bi bi-download me-2"></i>Export PDF</button>
+    </div>
+</div>
+
+<!-- Timetable Grid -->
+<div class="content-card mb-4">
+    <div class="table-responsive">
+        <table class="table table-bordered text-center align-middle">
+            <thead class="fw-bold">
+                <tr>
+                    <th style="width: 100px;">Time</th>
+                    <th>Monday</th>
+                    <th>Tuesday</th>
+                    <th>Wednesday</th>
+                    <th>Thursday</th>
+                    <th>Friday</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="fw-bold text-secondary">9:00 AM</td>
+                    <td>
+                        <div class="subject-card p-2 rounded bg-primary bg-opacity-10">
+                            <div class="fw-bold small">Mathematics</div>
+                            <div class="small text-muted">Dr. Smith | Room 201</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="subject-card p-2 rounded bg-info bg-opacity-10">
+                            <div class="fw-bold small">English</div>
+                            <div class="small text-muted">Ms. Brown | Room 105</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="subject-card p-2 rounded bg-warning bg-opacity-10">
+                            <div class="fw-bold small">History</div>
+                            <div class="small text-muted">Mr. Davis | Room 302</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="subject-card p-2 rounded bg-primary bg-opacity-10">
+                            <div class="fw-bold small">Mathematics</div>
+                            <div class="small text-muted">Dr. Smith | Room 201</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="subject-card p-2 rounded bg-success bg-opacity-10">
+                            <div class="fw-bold small">Chemistry</div>
+                            <div class="small text-muted">Dr. Williams | Lab 1</div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

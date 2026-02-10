@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Fee Management | Cruz Horizon{% endblock %}
+{% block portal_name %}Admin Portal{% endblock %}
+
+{% block sidebar %}
+{% include 'partials/sidebar_admin.html' %}
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-end mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">Fee Management</h2>
+        <p class="text-white-50">Manage student fees and collections</p>
+    </div>
+    <div>
+        <button class="btn btn-black">Generate Invoices</button>
+    </div>
+</div>
+
+<!-- Collection Stats -->
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="content-card">
+            <h5 class="fw-bold mb-4">Total Collected</h5>
+            <h2 class="fw-bold text-success">$145,200</h2>
+            <div class="text-muted small">Current Academic Year</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="content-card">
+            <h5 class="fw-bold mb-4">Pending Collection</h5>
+            <h2 class="fw-bold text-danger">$12,450</h2>
+            <div class="text-muted small">Due this month</div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Admin Academic | Cruz Horizon{% endblock %}
+{% block portal_name %}Admin Portal{% endblock %}
+
+{% block sidebar %}
+{% include 'partials/sidebar_admin.html' %}
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
+    <div>
+        <h2 class="fw-bold mb-1">Academic Management</h2>
+        <p class="text-white-50">Manage academic records and generate reports</p>
+    </div>
+    <div>
+        <button class="btn btn-outline-secondary me-2">Generate Hall Tickets</button>
+        <button class="btn btn-black">Download Reports</button>
+    </div>
+</div>
+
+<!-- Stats Cards -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3 col-sm-6">
+        <div class="card-box d-flex flex-column align-items-start justify-content-center p-4">
+            <div class="text-muted-custom mb-1" style="font-size: 0.9rem;">Total Students</div>
+            <h2 class="fw-bold mb-0 text-primary">2,543</h2>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="card-box d-flex flex-column align-items-start justify-content-center p-4">
+            <div class="text-muted-custom mb-1" style="font-size: 0.9rem;">Avg. GPA</div>
+            <h2 class="fw-bold mb-0 text-success">3.6</h2>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="card-box d-flex flex-column align-items-start justify-content-center p-4">
+            <div class="text-muted-custom mb-1" style="font-size: 0.9rem;">Pass Rate</div>
+            <h2 class="fw-bold mb-0" style="color: #a855f7;">94%</h2>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="card-box d-flex flex-column align-items-start justify-content-center p-4">
+            <div class="text-muted-custom mb-1" style="font-size: 0.9rem;">Honors Students</div>
+            <h2 class="fw-bold mb-0 text-warning">421</h2>
+        </div>
+    </div>
+</div>
+
+<!-- Class Performance Overview -->
+<div class="content-card">
+    <h5 class="fw-bold mb-4">Class Performance Overview</h5>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr class="text-muted small text-uppercase">
+                    <th class="fw-bold ps-3" style="background: transparent;">Class</th>
+                    <th class="fw-bold" style="background: transparent;">Students</th>
+                    <th class="fw-bold" style="background: transparent;">Avg. Score</th>
+                    <th class="fw-bold" style="background: transparent;">Pass Rate</th>
+                    <th class="fw-bold" style="background: transparent;">Top Performer</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="fw-medium ps-3">Grade 10-A</td>
+                    <td class="text-muted">45</td>
+                    <td>85.4</td>
+                    <td><span class="badge bg-black rounded-pill">95.6%</span></td>
+                    <td>Alice Johnson</td>
+                </tr>
+                <tr>
+                    <td class="fw-medium ps-3">Grade 10-B</td>
+                    <td class="text-muted">48</td>
+                    <td>82.1</td>
+                    <td><span class="badge bg-black rounded-pill">93.8%</span></td>
+                    <td>John Smith</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Question Bank | Cruz Horizon{% endblock %}
+{% block portal_name %}Student Portal{% endblock %}
+
+{% block sidebar %}
+{% include 'partials/sidebar_student.html' %}
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-end mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">Question Bank</h2>
+        <p class="text-white-50">Access previous year question papers</p>
+    </div>
+</div>
+
+<!-- Papers List -->
+<div class="content-card">
+    <h5 class="fw-bold mb-4">Available Papers</h5>
+    <div class="d-flex justify-content-between align-items-center p-3 border rounded mb-2">
+        <div>
+            <div class="fw-bold">Mathematics - 2023 Midterm</div>
+            <div class="text-muted small">Grade 10 • PDF</div>
+        </div>
+        <button class="btn btn-sm btn-black"><i class="bi bi-download"></i></button>
+    </div>
+</div>
+{% endblock %}

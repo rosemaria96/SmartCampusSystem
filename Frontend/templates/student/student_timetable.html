@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Student Timetable | Cruz Horizon{% endblock %}
+{% block portal_name %}Student Portal{% endblock %}
+
+{% block extra_head %}
+<style>
+    .highlight-card {
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 15px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 15px;
+        background: #fff;
+    }
+
+    body:not(.light-mode) .highlight-card {
+        background: rgba(255, 255, 255, 0.03);
+        border-color: #374151;
+    }
+
+    .highlight-icon {
+        width: 45px;
+        height: 45px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+    }
+
+    .upcoming-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    body:not(.light-mode) .upcoming-item {
+        border-bottom-color: #374151;
+    }
+
+    .upcoming-item:last-child {
+        border-bottom: none;
+    }
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'partials/sidebar_student.html' %}
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
+    <div>
+        <h2 class="fw-bold mb-1">Class Timetable</h2>
+        <p class="text-white-50">View your weekly schedule</p>
+    </div>
+    <div class="d-flex gap-2">
+        <button class="btn btn-light bg-white border"><i class="bi bi-calendar3 me-2"></i>This Week</button>
+        <button class="btn btn-black"><i class="bi bi-download me-2"></i>Export PDF</button>
+    </div>
+</div>
+
+<!-- Timetable Section -->
+<div class="content-card mb-4">
+    <div class="table-responsive">
+        <table class="table table-bordered text-center align-middle">
+            <thead class="fw-bold">
+                <tr>
+                    <th style="width: 100px;">Time</th>
+                    <th>Monday</th>
+                    <th>Tuesday</th>
+                    <th>Wednesday</th>
+                    <th>Thursday</th>
+                    <th>Friday</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="fw-bold text-secondary">9:00 AM</td>
+                    <td>
+                        <div class="subject-card p-2 rounded bg-primary bg-opacity-10">
+                            <div class="fw-bold small">Mathematics</div>
+                            <div class="small text-muted">Dr. Smith | Room 201</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="subject-card p-2 rounded bg-info bg-opacity-10">
+                            <div class="fw-bold small">English</div>
+                            <div class="small text-muted">Ms. Brown | Room 105</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="subject-card p-2 rounded bg-warning bg-opacity-10">
+                            <div class="fw-bold small">History</div>
+                            <div class="small text-muted">Mr. Davis | Room 302</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="subject-card p-2 rounded bg-primary bg-opacity-10">
+                            <div class="fw-bold small">Mathematics</div>
+                            <div class="small text-muted">Dr. Smith | Room 201</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="subject-card p-2 rounded bg-success bg-opacity-10">
+                            <div class="fw-bold small">Chemistry</div>
+                            <div class="small text-muted">Dr. Williams | Lab 1</div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Bottom Widgets -->
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="content-card h-100">
+            <h5 class="fw-bold mb-4">Today's Highlights</h5>
+            <div class="highlight-card">
+                <div class="highlight-icon bg-blue-subtle text-primary"
+                    style="background-color: rgba(59, 130, 246, 0.1);">
+                    <i class="bi bi-clock"></i>
+                </div>
+                <div>
+                    <small class="text-muted d-block uppercase" style="font-size: 0.7rem;">NEXT CLASS</small>
+                    <div class="fw-bold">Physics</div>
+                    <div class="small text-muted">10:00 AM - Lab 2</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="content-card h-100">
+            <h5 class="fw-bold mb-4">Upcoming This Week</h5>
+            <div class="upcoming-item">
+                <span class="text-muted">Physics Lab</span>
+                <span class="badge badge-neutral">Thursday</span>
+            </div>
+            <div class="upcoming-item border-0">
+                <span class="text-muted">Assembly</span>
+                <span class="badge badge-neutral">Friday</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

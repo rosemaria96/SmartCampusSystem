@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Fee Payment | Cruz Horizon{% endblock %}
+{% block portal_name %}Student Portal{% endblock %}
+
+{% block extra_head %}
+<style>
+    .fee-card {
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 24px;
+    }
+
+    .fee-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'partials/sidebar_student.html' %}
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-end mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">Fee Payment</h2>
+        <p class="text-white-50">Manage your tuition and other fees</p>
+    </div>
+</div>
+
+<!-- Fee Summary -->
+<div class="row g-4 mb-4">
+    <div class="col-md-6">
+        <div class="content-card">
+            <h5 class="fw-bold mb-4">Outstanding Fees</h5>
+            <div class="fee-item">
+                <div>
+                    <div class="fw-bold">Tuition Fee - Semester 1</div>
+                    <div class="text-muted small">Due on: 15 Feb 2024</div>
+                </div>
+                <div class="fw-bold">$2,500</div>
+            </div>
+            <div class="fee-item border-0">
+                <div>
+                    <div class="fw-bold">Library Fee</div>
+                    <div class="text-muted small">Due on: 15 Feb 2024</div>
+                </div>
+                <div class="fw-bold">$150</div>
+            </div>
+            <button class="btn btn-black w-100 mt-4">Pay Now</button>
+        </div>
+    </div>
+</div>
+{% endblock %}

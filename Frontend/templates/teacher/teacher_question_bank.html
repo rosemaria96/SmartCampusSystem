@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Question Bank | Cruz Horizon{% endblock %}
+{% block portal_name %}Teacher Portal{% endblock %}
+
+{% block extra_head %}
+<style>
+    .paper-item {
+        display: flex;
+        align-items: center;
+        padding: 20px;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        margin-bottom: 12px;
+        background: #fff;
+        transition: all 0.2s;
+    }
+
+    body:not(.light-mode) .paper-item {
+        background: #111827;
+        border-color: #374151;
+    }
+
+    .paper-icon {
+        width: 48px;
+        height: 48px;
+        background-color: rgba(59, 130, 246, 0.1);
+        color: #3b82f6;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-right: 16px;
+    }
+
+    .paper-actions {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'partials/sidebar_teacher.html' %}
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
+    <div>
+        <h2 class="fw-bold mb-1">Question Bank</h2>
+        <p class="text-white-50">Upload and manage question papers</p>
+    </div>
+    <div>
+        <button class="btn btn-black"><i class="bi bi-upload me-2"></i>Upload Paper</button>
+    </div>
+</div>
+
+<!-- Upload New Paper Section -->
+<div class="content-card mb-4">
+    <h5 class="fw-bold mb-4">Upload New Paper</h5>
+    <div class="row g-3 mb-4">
+        <div class="col-md-6">
+            <label class="form-label text-muted small fw-bold">Paper Title</label>
+            <input type="text" class="form-control" placeholder="Enter paper title">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label text-muted small fw-bold">Subject</label>
+            <select class="form-select">
+                <option>Mathematics</option>
+                <option>Physics</option>
+                <option>Chemistry</option>
+            </select>
+        </div>
+    </div>
+    <button class="btn btn-black">Submit for Approval</button>
+</div>
+
+<!-- My Uploaded Papers -->
+<div class="content-card">
+    <h5 class="fw-bold mb-4">My Uploaded Papers</h5>
+    <div class="paper-item">
+        <div class="paper-icon">
+            <i class="bi bi-file-earmark-text"></i>
+        </div>
+        <div>
+            <div class="fw-bold">Mid-term Mathematics</div>
+            <div class="small text-muted">Mathematics • Grade 10</div>
+        </div>
+        <div class="paper-actions">
+            <span class="badge bg-black text-white">Published</span>
+            <a href="#" class="btn btn-sm btn-outline-dark">Edit</a>
+            <a href="#" class="btn btn-sm btn-outline-dark"><i class="bi bi-download"></i></a>
+        </div>
+    </div>
+</div>
+{% endblock %}
