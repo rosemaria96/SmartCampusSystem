@@ -1,14 +1,18 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-from .models import User, StudentProfile, TeacherProfile
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from .models import User
 
-class CustomUserAdmin(UserAdmin):
-    model = User
-    list_display = ['username', 'email', 'is_student', 'is_teacher', 'is_admin', 'is_staff']
-    fieldsets = UserAdmin.fieldsets + (
-        (None, {'fields': ('is_student', 'is_teacher', 'is_admin', 'profile_picture')}),
+
+@admin.register(User)
+class UserAdmin(BaseUserAdmin):
+    list_display = ('username', 'name', 'email', 'role', 'is_active', 'is_staff')
+    list_filter = ('role', 'is_active', 'is_staff')
+    search_fields = ('username', 'name', 'email')
+    
+    fieldsets = BaseUserAdmin.fieldsets + (
+        ('Custom Fields', {'fields': ('name', 'role')}),
     )
-
-admin.site.register(User, CustomUserAdmin)
-admin.site.register(StudentProfile)
-admin.site.register(TeacherProfile)
+    
+    add_fieldsets = BaseUserAdmin.add_fieldsets + (
+        ('Custom Fields', {'fields': ('name', 'role')}),
+    )

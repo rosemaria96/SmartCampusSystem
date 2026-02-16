@@ -1,0 +1,316 @@
+database:
+  name: smart_campus_system
+
+tables:
+
+  users:
+    description: Authentication and role management
+    columns:
+      user_id:
+        type: integer
+        primary_key: true
+      name:
+        type: string(100)
+        nullable: false
+      email:
+        type: string(100)
+        nullable: false
+        unique: true
+      password_hash:
+        type: string(255)
+        nullable: false
+      role:
+        type: enum
+        values: [ADMIN, TEACHER, STUDENT]
+        nullable: false
+      is_active:
+        type: boolean
+        default: true
+      created_at:
+        type: timestamp
+        default: current_timestamp
+
+
+  departments:
+    columns:
+      department_id:
+        type: integer
+        primary_key: true
+      department_name:
+        type: string(100)
+        unique: true
+        nullable: false
+
+
+  courses:
+    columns:
+      course_id:
+        type: integer
+        primary_key: true
+      department_id:
+        type: integer
+        foreign_key:
+          table: departments
+          column: department_id
+      course_name:
+        type: string(100)
+        nullable: false
+      duration_years:
+        type: integer
+        nullable: false
+
+
+  semesters:
+    columns:
+      semester_id:
+        type: integer
+        primary_key: true
+      course_id:
+        type: integer
+        foreign_key:
+          table: courses
+          column: course_id
+      semester_number:
+        type: integer
+        nullable: false
+
+
+  subjects:
+    columns:
+      subject_id:
+        type: integer
+        primary_key: true
+      semester_id:
+        type: integer
+        foreign_key:
+          table: semesters
+          column: semester_id
+      subject_code:
+        type: string(20)
+        unique: true
+        nullable: false
+      subject_name:
+        type: string(100)
+        nullable: false
+      credits:
+        type: integer
+        nullable: false
+
+
+  teacher_subject_assignment:
+    columns:
+      id:
+        type: integer
+        primary_key: true
+      teacher_id:
+        type: integer
+        foreign_key:
+          table: users
+          column: user_id
+      subject_id:
+        type: integer
+        foreign_key:
+          table: subjects
+          column: subject_id
+
+
+  students:
+    columns:
+      student_id:
+        type: integer
+        primary_key: true
+        foreign_key:
+          table: users
+          column: user_id
+      course_id:
+        type: integer
+        foreign_key:
+          table: courses
+          column: course_id
+      semester_id:
+        type: integer
+        foreign_key:
+          table: semesters
+          column: semester_id
+      enrollment_number:
+        type: string(50)
+        unique: true
+        nullable: false
+
+
+  attendance:
+    columns:
+      attendance_id:
+        type: integer
+        primary_key: true
+      student_id:
+        type: integer
+        foreign_key:
+          table: students
+          column: student_id
+      subject_id:
+        type: integer
+        foreign_key:
+          table: subjects
+          column: subject_id
+      date:
+        type: date
+        nullable: false
+      status:
+        type: enum
+        values: [PRESENT, ABSENT]
+        nullable: false
+      marked_by:
+        type: integer
+        foreign_key:
+          table: users
+          column: user_id
+
+
+  timetable:
+    columns:
+      timetable_id:
+        type: integer
+        primary_key: true
+      subject_id:
+        type: integer
+        foreign_key:
+          table: subjects
+          column: subject_id
+      teacher_id:
+        type: integer
+        foreign_key:
+          table: users
+          column: user_id
+      semester_id:
+        type: integer
+        foreign_key:
+          table: semesters
+          column: semester_id
+      day_of_week:
+        type: string(10)
+        nullable: false
+      start_time:
+        type: time
+        nullable: false
+      end_time:
+        type: time
+        nullable: false
+
+
+  notifications:
+    columns:
+      notification_id:
+        type: integer
+        primary_key: true
+      user_id:
+        type: integer
+        foreign_key:
+          table: users
+          column: user_id
+      message:
+        type: text
+        nullable: false
+      is_read:
+        type: boolean
+        default: false
+      created_at:
+        type: timestamp
+        default: current_timestamp
+
+
+  question_papers:
+    columns:
+      paper_id:
+        type: integer
+        primary_key: true
+      subject_id:
+        type: integer
+        foreign_key:
+          table: subjects
+          column: subject_id
+      exam_year:
+        type: integer
+        nullable: false
+      pdf_path:
+        type: string(255)
+        nullable: false
+      uploaded_by:
+        type: integer
+        foreign_key:
+          table: users
+          column: user_id
+      uploaded_at:
+        type: timestamp
+        default: current_timestamp
+
+
+  fee_structure:
+    columns:
+      fee_id:
+        type: integer
+        primary_key: true
+      course_id:
+        type: integer
+        foreign_key:
+          table: courses
+          column: course_id
+      semester_id:
+        type: integer
+        foreign_key:
+          table: semesters
+          column: semester_id
+      total_amount:
+        type: decimal(10,2)
+        nullable: false
+      due_date:
+        type: date
+        nullable: false
+
+
+  student_fees:
+    columns:
+      student_fee_id:
+        type: integer
+        primary_key: true
+      student_id:
+        type: integer
+        foreign_key:
+          table: students
+          column: student_id
+      fee_id:
+        type: integer
+        foreign_key:
+          table: fee_structure
+          column: fee_id
+      payable_amount:
+        type: decimal(10,2)
+        nullable: false
+      status:
+        type: enum
+        values: [PENDING, PARTIAL, PAID]
+        nullable: false
+
+
+  payments:
+    columns:
+      payment_id:
+        type: integer
+        primary_key: true
+      student_fee_id:
+        type: integer
+        foreign_key:
+          table: student_fees
+          column: student_fee_id
+      amount_paid:
+        type: decimal(10,2)
+        nullable: false
+      payment_method:
+        type: string(50)
+        nullable: false
+      transaction_reference:
+        type: string(100)
+        unique: true
+      payment_date:
+        type: timestamp
+        default: current_timestamp

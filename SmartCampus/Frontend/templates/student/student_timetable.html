@@ -82,39 +82,26 @@
                 </tr>
             </thead>
             <tbody>
+                {% for day_info in timetable_list %}
                 <tr>
-                    <td class="fw-bold text-secondary">9:00 AM</td>
-                    <td>
-                        <div class="subject-card p-2 rounded bg-primary bg-opacity-10">
-                            <div class="fw-bold small">Mathematics</div>
-                            <div class="small text-muted">Dr. Smith | Room 201</div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="subject-card p-2 rounded bg-info bg-opacity-10">
-                            <div class="fw-bold small">English</div>
-                            <div class="small text-muted">Ms. Brown | Room 105</div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="subject-card p-2 rounded bg-warning bg-opacity-10">
-                            <div class="fw-bold small">History</div>
-                            <div class="small text-muted">Mr. Davis | Room 302</div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="subject-card p-2 rounded bg-primary bg-opacity-10">
-                            <div class="fw-bold small">Mathematics</div>
-                            <div class="small text-muted">Dr. Smith | Room 201</div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="subject-card p-2 rounded bg-success bg-opacity-10">
-                            <div class="fw-bold small">Chemistry</div>
-                            <div class="small text-muted">Dr. Williams | Lab 1</div>
+                    <td class="fw-bold text-secondary bg-light">{{ day_info.day|title }}</td>
+                    <td colspan="5" class="text-start">
+                        <div class="d-flex flex-wrap gap-2">
+                            {% for class in day_info.classes %}
+                            <div class="subject-card p-2 rounded bg-primary bg-opacity-10 border border-primary border-opacity-25"
+                                style="min-width: 150px;">
+                                <div class="fw-bold small">{{ class.subject.subject_name }}</div>
+                                <div class="small text-muted">{{ class.start_time|time:"H:i" }} - {{
+                                    class.end_time|time:"H:i" }}</div>
+                                <div class="small text-muted" style="font-size: 0.75rem;">{{ class.teacher.name }}</div>
+                            </div>
+                            {% empty %}
+                            <span class="text-muted small fst-italic">No classes scheduled.</span>
+                            {% endfor %}
                         </div>
                     </td>
                 </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>

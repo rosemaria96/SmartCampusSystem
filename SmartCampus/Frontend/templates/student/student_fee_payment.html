@@ -39,22 +39,27 @@
 <div class="row g-4 mb-4">
     <div class="col-md-6">
         <div class="content-card">
-            <h5 class="fw-bold mb-4">Outstanding Fees</h5>
-            <div class="fee-item">
+            <h5 class="fw-bold mb-4">Fee Records</h5>
+            {% for fee in student_fees %}
+            <div class="fee-item {% if forloop.last %}border-0{% endif %}">
                 <div>
-                    <div class="fw-bold">Tuition Fee - Semester 1</div>
-                    <div class="text-muted small">Due on: 15 Feb 2024</div>
+                    <div class="fw-bold">{{ fee.fee_structure.course.course_name }} - Semester {{
+                        fee.fee_structure.semester.semester_number }}</div>
+                    <div class="text-muted small">Due: {{ fee.fee_structure.due_date|date:"M d, Y" }}</div>
                 </div>
-                <div class="fw-bold">$2,500</div>
-            </div>
-            <div class="fee-item border-0">
-                <div>
-                    <div class="fw-bold">Library Fee</div>
-                    <div class="text-muted small">Due on: 15 Feb 2024</div>
+                <div class="text-end">
+                    <div class="fw-bold">${{ fee.payable_amount }}</div>
+                    <span
+                        class="badge {% if fee.status == 'PAID' %}bg-success{% else %}bg-warning text-dark{% endif %}">{{
+                        fee.status }}</span>
                 </div>
-                <div class="fw-bold">$150</div>
             </div>
-            <button class="btn btn-black w-100 mt-4">Pay Now</button>
+            {% if fee.status == 'PENDING' %}
+            <button class="btn btn-black w-100 mt-2 mb-4">Pay Now</button>
+            {% endif %}
+            {% empty %}
+            <p class="text-muted">No fee records found.</p>
+            {% endfor %}
         </div>
     </div>
 </div>

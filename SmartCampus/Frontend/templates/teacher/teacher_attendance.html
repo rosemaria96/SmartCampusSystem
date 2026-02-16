@@ -88,43 +88,87 @@
         <h2 class="fw-bold mb-1">Mark Attendance</h2>
         <p class="text-white-50">Record student attendance for your classes</p>
     </div>
-    <div>
-        <button class="btn btn-black"><i class="bi bi-save me-2"></i>Save Attendance</button>
-    </div>
-</div>
-
-<div class="row g-4">
     <!-- Student List Section -->
     <div class="col-lg-8">
         <div class="content-card h-100">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h5 class="fw-bold mb-0">Student List</h5>
-                <select class="form-select filter-select" style="width: 150px;">
-                    <option selected>Grade 10-A</option>
-                    <option value="1">Grade 10-B</option>
-                    <option value="2">Grade 12</option>
-                </select>
-            </div>
+            <!-- Filter Form -->
+            <form method="GET" action="{% url 'take_attendance' %}" class="mb-4">
+                <div class="d-flex flex-wrap gap-2 align-items-end">
+                    <div>
+                        <label class="small text-muted mb-1">Subject</label>
+                        <select name="subject" class="form-select form-select-sm" style="width: 150px;">
+                            <option value="">Select Subject</option>
+                            {% for subject in subjects %}
+                            <option value="{{ subject.id }}" {% if selected_subject_id|add:"0" == subject.id %}selected{% endif %}>
+                                {{ subject.subject_name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label class="small text-muted mb-1">Semester</label>
+                        <select name="semester" class="form-select form-select-sm" style="width: 150px;">
+                            <option value="">Select Semester</option>
+                            {% for semester in semesters %}
+                            <option value="{{ semester.id }}" {% if selected_semester_id|add:"0" == semester.id %}selected{% endif %}>
+                                Semester {{ semester.semester_number }} - {{ semester.course.course_name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-sm btn-primary">Load Students</button>
+                </div>
+            </form>
 
-            <div class="table-responsive">
-                <table class="table table-hover align-middle custom-table">
-                    <thead>
-                        <tr>
-                            <th scope="col" class="text-muted small text-uppercase ps-3">Roll No</th>
-                            <th scope="col" class="text-muted small text-uppercase">Name</th>
-                            <th scope="col" class="text-muted small text-uppercase">Present</th>
-                        </tr>
-                    </thead>
-                    <tbody class="border-top-0">
-                        <!-- Mock table content, would naturally be a loop in a full implementation -->
-                        <tr>
-                            <td class="ps-3 text-muted">001</td>
-                            <td class="fw-medium">Alice Johnson</td>
-                            <td><input class="form-check-input" type="checkbox" checked></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <form method="POST" action="{% url 'take_attendance' %}">
+                {% csrf_token %}
+                <input type="hidden" name="subject" value="{{ selected_subject_id }}">
+                <input type="hidden" name="semester" value="{{ selected_semester_id }}">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold mb-0">Student List</h5>
+                    {% if students %}
+                    <button type="submit" class="btn btn-black"><i class="bi bi-save me-2"></i>Save Attendance</button>
+                    {% endif %}
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle custom-table">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="text-muted small text-uppercase ps-3">Roll No</th>
+                                <th scope="col" class="text-muted small text-uppercase">Name</th>
+                                <th scope="col" class="text-muted small text-uppercase">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="border-top-0">
+                            {% for student in students %}
+                            <tr>
+                                <td class="ps-3 text-muted">{{ student.enrollment_number }}</td>
+                                <td class="fw-medium">{{ student.user.name }}</td>
+                                <td>
+                                    <select name="attendance_{{ student.user.id }}" class="form-select form-select-sm" style="width: 120px;">
+                                        <option value="PRESENT" selected>Present</option>
+                                        <option value="ABSENT">Absent</option>
+                                        <option value="LATE">Late</option>
+                                        <option value="EXCUSED">Excused</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center py-4 text-muted">
+                                    {% if selected_subject_id %}
+                                    No students found for this selection.
+                                    {% else %}
+                                    Please select a subject and semester to load students.
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </form>
         </div>
     </div>
 

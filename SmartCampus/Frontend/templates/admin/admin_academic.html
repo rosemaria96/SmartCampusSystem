@@ -49,37 +49,123 @@
     </div>
 </div>
 
-<!-- Class Performance Overview -->
-<div class="content-card">
-    <h5 class="fw-bold mb-4">Class Performance Overview</h5>
-    <div class="table-responsive">
-        <table class="table table-hover align-middle">
-            <thead>
-                <tr class="text-muted small text-uppercase">
-                    <th class="fw-bold ps-3" style="background: transparent;">Class</th>
-                    <th class="fw-bold" style="background: transparent;">Students</th>
-                    <th class="fw-bold" style="background: transparent;">Avg. Score</th>
-                    <th class="fw-bold" style="background: transparent;">Pass Rate</th>
-                    <th class="fw-bold" style="background: transparent;">Top Performer</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="fw-medium ps-3">Grade 10-A</td>
-                    <td class="text-muted">45</td>
-                    <td>85.4</td>
-                    <td><span class="badge bg-black rounded-pill">95.6%</span></td>
-                    <td>Alice Johnson</td>
-                </tr>
-                <tr>
-                    <td class="fw-medium ps-3">Grade 10-B</td>
-                    <td class="text-muted">48</td>
-                    <td>82.1</td>
-                    <td><span class="badge bg-black rounded-pill">93.8%</span></td>
-                    <td>John Smith</td>
-                </tr>
-            </tbody>
-        </table>
+<!-- Academic Structure -->
+<div class="row g-4">
+    <!-- Departments -->
+    <div class="col-md-12">
+        <div class="content-card">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="fw-bold mb-0">Departments</h5>
+                <a href="{% url 'add_department' %}" class="btn btn-sm btn-black"><i class="bi bi-plus-lg me-1"></i> Add
+                    New</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr class="text-muted small text-uppercase">
+                            <th class="ps-3">Name</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for dept in departments %}
+                        <tr>
+                            <td class="fw-medium ps-3">{{ dept.department_name }}</td>
+                            <td class="text-end">
+                                <a href="{% url 'edit_department' dept.id %}"
+                                    class="btn btn-link action-btn-color p-1"><i class="bi bi-pencil-square"></i></a>
+                                <a href="{% url 'delete_department' dept.id %}" class="btn btn-link text-danger p-1"
+                                    onclick="return confirm('Are you sure?')"><i class="bi bi-trash"></i></a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center text-muted">No departments found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Courses -->
+    <div class="col-md-6">
+        <div class="content-card h-100">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="fw-bold mb-0">Courses</h5>
+                <a href="{% url 'add_course' %}" class="btn btn-sm btn-black"><i class="bi bi-plus-lg me-1"></i> Add</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr class="text-muted small text-uppercase">
+                            <th class="ps-3">Name</th>
+                            <th>Duration</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for course in courses %}
+                        <tr>
+                            <td class="fw-medium ps-3">{{ course.course_name }}</td>
+                            <td class="text-muted">{{ course.duration_years }} Years</td>
+                            <td class="text-end">
+                                <a href="{% url 'edit_course' course.id %}" class="btn btn-link action-btn-color p-1"><i
+                                        class="bi bi-pencil-square"></i></a>
+                                <a href="{% url 'delete_course' course.id %}" class="btn btn-link text-danger p-1"
+                                    onclick="return confirm('Are you sure?')"><i class="bi bi-trash"></i></a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center text-muted">No courses found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Subjects -->
+    <div class="col-md-6">
+        <div class="content-card h-100">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="fw-bold mb-0">Subjects</h5>
+                <a href="{% url 'add_subject' %}" class="btn btn-sm btn-black"><i class="bi bi-plus-lg me-1"></i>
+                    Add</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr class="text-muted small text-uppercase">
+                            <th class="ps-3">Name</th>
+                            <th>Code</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for subject in subjects %}
+                        <tr>
+                            <td class="fw-medium ps-3">{{ subject.subject_name }}</td>
+                            <td class="text-muted">{{ subject.subject_code }}</td>
+                            <td class="text-end">
+                                <a href="{% url 'edit_subject' subject.id %}"
+                                    class="btn btn-link action-btn-color p-1"><i class="bi bi-pencil-square"></i></a>
+                                <a href="{% url 'delete_subject' subject.id %}" class="btn btn-link text-danger p-1"
+                                    onclick="return confirm('Are you sure?')"><i class="bi bi-trash"></i></a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center text-muted">No subjects found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -1,17 +1,21 @@
 from django.urls import path
-from . import views
+from . import teacher_views, student_views
 
 urlpatterns = [
-    # Admin
-    path('admin/academic/', views.admin_academic, name='admin_academic'),
-    path('admin/timetable/', views.admin_timetable, name='admin_timetable'),
-    path('admin/attendance/', views.admin_attendance, name='admin_attendance'),
-    # Student
-    path('student/academics/', views.student_academics, name='student_academics'),
-    path('student/timetable/', views.student_timetable, name='student_timetable'),
-    path('student/attendance/', views.student_attendance, name='student_attendance'),
-    # Teacher
-    path('teacher/academics/', views.teacher_academics, name='teacher_academics'),
-    path('teacher/timetable/', views.teacher_timetable, name='teacher_timetable'),
-    path('teacher/attendance/', views.teacher_attendance, name='teacher_attendance'),
+    # Teacher URLs
+    path('teacher/dashboard/', teacher_views.teacher_dashboard, name='teacher_dashboard'),
+    path('teacher/timetable/', teacher_views.teacher_timetable, name='teacher_timetable'),
+    path('teacher/attendance/take/', teacher_views.take_attendance, name='take_attendance'),
+    path('teacher/attendance/view/', teacher_views.view_attendance, name='view_attendance'),
+    path('teacher/notifications/', teacher_views.teacher_notifications, name='teacher_notifications'),
+    path('teacher/question-papers/', teacher_views.teacher_question_papers, name='teacher_question_papers'),
+    
+    # Student URLs
+    path('student/dashboard/', student_views.student_dashboard, name='student_dashboard'),
+    path('student/attendance/', student_views.student_attendance, name='student_attendance'),
+    path('student/timetable/', student_views.student_timetable, name='student_timetable'),
+    path('student/academics/', student_views.student_academics, name='student_academics'),
+    path('student/notifications/', student_views.student_notifications, name='student_notifications'),
+    path('student/question-bank/', student_views.student_question_bank, name='student_question_bank'),
+    path('student/fees/', student_views.student_fee_payment, name='student_fee_payment'),
 ]

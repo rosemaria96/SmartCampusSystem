@@ -69,11 +69,25 @@
                         </tr>
                     </thead>
                     <tbody class="border-top-0">
+                        {% for record in attendance_records %}
                         <tr>
-                            <td>2026-01-15</td>
-                            <td>Mathematics</td>
-                            <td class="text-end"><span class="badge badge-presence-present">present</span></td>
+                            <td>{{ record.date }}</td>
+                            <td>{{ record.subject.subject_name }}</td>
+                            <td class="text-end">
+                                {% if record.status == 'PRESENT' %}
+                                <span class="badge badge-presence-present">Present</span>
+                                {% elif record.status == 'ABSENT' %}
+                                <span class="badge badge-presence-absent">Absent</span>
+                                {% else %}
+                                <span class="badge bg-warning text-dark">{{ record.status|title }}</span>
+                                {% endif %}
+                            </td>
                         </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center py-4 text-muted">No attendance records found.</td>
+                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
