@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}User Management | Cruz Horizon{% endblock %}
+{% block portal_name %}Admin Portal{% endblock %}
+
+{% block sidebar %}
+{% include 'partials/sidebar_admin.html' %}
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
+    <div>
+        <h2 class="fw-bold mb-1">User Management</h2>
+        <p class="text-white-50">Manage students, teachers, and administrators</p>
+    </div>
+    <div>
+        <a href="{% url 'create_user' %}" class="btn btn-black"><i class="bi bi-person-plus-fill me-2"></i>Add User</a>
+    </div>
+</div>
+
+<!-- Stats Grid -->
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+        <div class="stat-card admin-card p-3 rounded-3 d-flex justify-content-between align-items-center">
+            <div>
+                <div class="text-muted small mb-1">Total Students</div>
+                <h3 class="fw-bold mb-1">{{ total_students }}</h3>
+            </div>
+            <div class="stat-icon-wrapper" style="background-color: #eff6ff; color: #3b82f6;">
+                <i class="bi bi-people"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="stat-card admin-card p-3 rounded-3 d-flex justify-content-between align-items-center">
+            <div>
+                <div class="text-muted small mb-1">Teachers</div>
+                <h3 class="fw-bold mb-1">{{ total_teachers }}</h3>
+            </div>
+            <div class="stat-icon-wrapper" style="background-color: #fcf4ff; color: #a855f7;">
+                <i class="bi bi-person-badge"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- All Users Table -->
+<div class="content-card mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <h5 class="fw-bold mb-0">All Users</h5>
+        <form method="GET" class="d-flex gap-2">
+            <div class="input-group admin-search-box" style="width: 250px;">
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                <input type="text" name="search" class="form-control" placeholder="Search users..."
+                    value="{{ request.GET.search|default:'' }}">
+            </div>
+            <select name="role" class="form-select custom-input" style="width: 150px;" onchange="this.form.submit()">
+                <option value="">All Roles</option>
+                <option value="STUDENT" {% if selected_role == 'STUDENT' %}selected{% endif %}>Student</option>
+                <option value="TEACHER" {% if selected_role == 'TEACHER' %}selected{% endif %}>Teacher</option>
+                <option value="ADMIN" {% if selected_role == 'ADMIN' %}selected{% endif %}>Admin</option>
+            </select>
+        </form>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table custom-table table-hover align-middle">
+            <thead>
+                <tr class="text-muted small text-uppercase">
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Status</th>
+                    <th scope="col" class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in users %}
+                <tr>
+                    <td class="fw-bold">{{ u.name|default:u.username }} {% if u == user %}(You){% endif %}</td>
+                    <td class="text-muted">{{ u.email }}</td>
+                    <td>
+                        {% if u.role == 'ADMIN' %}
+                        <span class="badge badge-role-admin">Admin</span>
+                        {% elif u.role == 'TEACHER' %}
+                        <span
+                            class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">Teacher</span>
+                        {% else %}
+                        <span
+                            class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill">Student</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if u.is_active %}
+                        <span class="badge badge-status-active rounded-pill">Active</span>
+                        {% else %}
+                        <span class="badge bg-secondary rounded-pill">Inactive</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-end">
+                        <a href="{% url 'user_profile' u.id %}" class="btn btn-link text-primary p-1"
+                            title="View Profile"><i class="bi bi-eye"></i></a>
+                        <a href="/admin/django/users/user/{{ u.id }}/change/" class="btn btn-link action-btn-color p-1"
+                            target="_blank" title="Edit in Database"><i class="bi bi-pencil-square"></i></a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center py-4 text-muted">No users found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

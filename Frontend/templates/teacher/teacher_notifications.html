@@ -1,0 +1,67 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Notifications | Cruz Horizon{% endblock %}
+{% block portal_name %}Teacher Portal{% endblock %}
+
+{% block sidebar %}
+{% include 'partials/sidebar_teacher.html' %}
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-end mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">Notifications</h2>
+        <p class="text-white-50">Stay updated with latest announcements</p>
+    </div>
+</div>
+
+<!-- Notifications List -->
+<div class="content-card">
+    <h5 class="fw-bold mb-4">Unread Notifications</h5>
+    <div id="notification-list">
+        {% for n in notifications %}
+        <div class="notification-item unread mb-3 p-3 border rounded position-relative" id="noti-{{ n.id }}">
+            <div class="d-flex justify-content-between">
+                <div class="fw-bold">{{ n.message }}</div>
+                <button class="btn btn-sm btn-link text-muted" onclick="markAsRead({{ n.id }})" title="Mark as Read">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div class="text-muted small mt-1">{{ n.created_at|timesince }} ago</div>
+            <div class="mt-2 small text-secondary">
+                From: {% if n.user %}{{ n.user.name }} ({{ n.user.get_role_display }}){% else %}System Broadcast{% endif %}
+            </div>
+        </div>
+        {% empty %}
+        <div class="text-center py-5 text-muted">
+            <i class="bi bi-bell-slash fs-1 d-block mb-3"></i>
+            No unread notifications
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    function markAsRead(id) {
+        if (confirm('Mark this notification as read?')) {
+            fetch(/api/mark-read//, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'
+                },
+            })
+                .then(response => {
+                    if (response.ok) {
+                        const el = document.getElementById(
+oti-);
+                        el.style.opacity = '0';
+                        setTimeout(() => el.remove(), 300);
+                    }
+                });
+        }
+    }
+</script>
+{% endblock %}

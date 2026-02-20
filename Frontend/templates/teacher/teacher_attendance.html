@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Teacher Attendance | Cruz Horizon{% endblock %}
+{% block portal_name %}Teacher Portal{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* Calendar Styles */
+    .calendar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 10px;
+        text-align: center;
+    }
+
+    .calendar-day-name {
+        font-size: 0.8rem;
+        color: #94a3b8;
+        margin-bottom: 10px;
+    }
+
+    .calendar-day {
+        font-size: 0.9rem;
+        padding: 8px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .calendar-day:hover {
+        background-color: #f1f5f9;
+    }
+
+    .calendar-day.active {
+        background-color: #000;
+        color: #fff;
+        font-weight: bold;
+    }
+
+    body:not(.light-mode) .calendar-day.active {
+        background-color: #fff;
+        color: #000;
+    }
+
+    body:not(.light-mode) .calendar-day:hover {
+        background-color: #374151;
+    }
+
+    .calendar-day.disabled {
+        color: #cbd5e1;
+        cursor: default;
+    }
+
+    body:not(.light-mode) .calendar-day.disabled {
+        color: #4b5563;
+    }
+
+    /* Checkbox Customization */
+    .form-check-input:checked {
+        background-color: #22c55e;
+        border-color: #22c55e;
+    }
+
+    .form-check-input {
+        width: 1.2em;
+        height: 1.2em;
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'partials/sidebar_teacher.html' %}
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
+    <div>
+        <h2 class="fw-bold mb-1">Mark Attendance</h2>
+        <p class="text-white-50">Record student attendance for your classes</p>
+    </div>
+    <!-- Student List Section -->
+    <div class="col-lg-8">
+        <div class="content-card h-100">
+            <!-- Filter Form -->
+            <form method="GET" action="{% url 'take_attendance' %}" class="mb-4" id="filterForm">
+                <div class="row g-2 align-items-end">
+                    <!-- Course Select -->
+                    <div class="col-md-4">
+                        <label class="small text-muted mb-1">Course</label>
+                        <select name="course" class="form-select form-select-sm"
+                            onchange="document.getElementById('filterForm').submit()">
+                            <option value="">Select Course</option>
+                            {% for course in courses %}
+                            <option value="{{ course.id }}" {% if selected_course_id == course.id %}selected{% endif %}>
+                                {{ course.course_name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Semester Select -->
+                    <div class="col-md-4">
+                        <label class="small text-muted mb-1">Semester</label>
+                        <select name="semester" class="form-select form-select-sm"
+                            onchange="document.getElementById('filterForm').submit()" {% if not semesters %}disabled{% endif %}>
+                            <option value="">Select Semester</option>
+                            {% for semester in semesters %}
+                            <option value="{{ semester.id }}" {% if selected_semester_id == semester.id %}selected{% endif %}>
+                                Semester {{ semester.semester_number }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Subject Select -->
+                    <div class="col-md-4">
+                        <label class="small text-muted mb-1">Subject</label>
+                        <select name="subject" class="form-select form-select-sm"
+                            onchange="document.getElementById('filterForm').submit()" {% if not subjects %}disabled{% endif %}>
+                            <option value="">Select Subject</option>
+                            {% for subject in subjects %}
+                            <option value="{{ subject.id }}" {% if selected_subject_id == subject.id %}selected{% endif %}>
+                                {{ subject.subject_name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </form>
+
+            <form method="POST" action="{% url 'take_attendance' %}">
+                {% csrf_token %}
+                <input type="hidden" name="subject" value="{{ selected_subject_id }}">
+                <input type="hidden" name="semester" value="{{ selected_semester_id }}">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold mb-0">Student List</h5>
+                    {% if students %}
+                    <button type="submit" class="btn btn-black"><i class="bi bi-save me-2"></i>Save Attendance</button>
+                    {% endif %}
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle custom-table">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="text-muted small text-uppercase ps-3">Roll No</th>
+                                <th scope="col" class="text-muted small text-uppercase">Name</th>
+                                <th scope="col" class="text-muted small text-uppercase">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="border-top-0">
+                            {% for student in students %}
+                            <tr>
+                                <td class="ps-3 text-muted">{{ student.enrollment_number }}</td>
+                                <td class="fw-medium">{{ student.user.name }}</td>
+                                <td>
+                                    <select name="attendance_{{ student.user.id }}" class="form-select form-select-sm"
+                                        style="width: 120px;">
+                                        <option value="PRESENT" selected>Present</option>
+                                        <option value="ABSENT">Absent</option>
+                                        <option value="LATE">Late</option>
+                                        <option value="EXCUSED">Excused</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center py-4 text-muted">
+                                    {% if selected_subject_id %}
+                                    No students found for this selection.
+                                    {% else %}
+                                    Please select a subject and semester to load students.
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Calendar Section -->
+    <div class="col-lg-4">
+        <div class="content-card">
+            <h5 class="fw-bold mb-4">Select Date</h5>
+
+            <div class="calendar-header">
+                <button class="btn btn-sm btn-outline-secondary border-0"><i class="bi bi-chevron-left"></i></button>
+                <span class="fw-bold">January 2026</span>
+                <button class="btn btn-sm btn-outline-secondary border-0"><i class="bi bi-chevron-right"></i></button>
+            </div>
+
+            <div class="calendar-grid">
+                <div class="calendar-day-name">Su</div>
+                <div class="calendar-day-name">Mo</div>
+                <div class="calendar-day-name">Tu</div>
+                <div class="calendar-day-name">We</div>
+                <div class="calendar-day-name">Th</div>
+                <div class="calendar-day-name">Fr</div>
+                <div class="calendar-day-name">Sa</div>
+                <!-- Calendar days omitted for brevity, would be generated by JS or loop -->
+                <div class="calendar-day active">26</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

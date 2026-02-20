@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Create User | Cruz Horizon{% endblock %}
+{% block portal_name %}Admin Portal{% endblock %}
+
+{% block sidebar %}
+{% include 'partials/sidebar_admin.html' %}
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="mb-4">
+    <h2 class="fw-bold mb-1">Create New User</h2>
+    <p class="text-white-50">Add a new student, teacher, or administrator to the system.</p>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="content-card">
+            <form method="POST" action="{% url 'create_user' %}">
+                {% csrf_token %}
+
+                <h5 class="fw-bold mb-4">User Details</h5>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">Username</label>
+                        <input type="text" name="username" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">Full Name</label>
+                        <input type="text" name="name" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">Email Address</label>
+                        <input type="email" name="email" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">Password</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label text-muted small">Role</label>
+                        <select name="role" id="roleSelect" class="form-select">
+                            <option value="STUDENT">Student</option>
+                            <option value="TEACHER">Teacher</option>
+                            <option value="ADMIN">Admin</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Student Specific Fields -->
+                <div id="studentFields">
+                    <h5 class="fw-bold mb-4 pt-2 border-top border-secondary border-opacity-25">Student Information</h5>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small">Enrollment Number</label>
+                            <input type="text" name="enrollment_number" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small">Course</label>
+                            <select name="course" class="form-select">
+                                <option value="">Select Course</option>
+                                {% for course in courses %}
+                                <option value="{{ course.id }}">{{ course.course_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small">Current Semester (Number)</label>
+                            <input type="number" name="semester_number" class="form-control" min="1" max="10"
+                                placeholder="e.g. 1">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <a href="{% url 'user_management' %}" class="btn btn-outline-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary px-4">Create User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="content-card bg-primary-subtle border-0">
+            <h6 class="fw-bold text-primary mb-3"><i class="bi bi-info-circle me-2"></i>Help & Information</h6>
+            <p class="small text-muted mb-2">
+                <strong>Roles:</strong>
+            <ul class="small text-muted ps-3 mb-3">
+                <li><strong>Student:</strong> Access to classes, attendance, fee payment. Requires enrollment details.
+                </li>
+                <li><strong>Teacher:</strong> Manage classes, mark attendance, upload question papers.</li>
+                <li><strong>Admin:</strong> Full system access, user management, configuration.</li>
+            </ul>
+            </p>
+            <p class="small text-muted mb-0">
+                Default password will be set to provided password. Users can change it later from their profile.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const roleSelect = document.getElementById('roleSelect');
+        const studentFields = document.getElementById('studentFields');
+
+        function toggleStudentFields() {
+            if (roleSelect.value === 'STUDENT') {
+                studentFields.style.display = 'block';
+                // Make inputs required
+                studentFields.querySelectorAll('input, select').forEach(el => el.required = true);
+            } else {
+                studentFields.style.display = 'none';
+                // Remove required
+                studentFields.querySelectorAll('input, select').forEach(el => el.required = false);
+            }
+        }
+
+        roleSelect.addEventListener('change', toggleStudentFields);
+        toggleStudentFields(); // Initial state
+    });
+</script>
+{% endblock %}
