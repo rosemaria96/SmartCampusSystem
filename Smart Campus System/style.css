@@ -1,0 +1,1446 @@
+/* ===== GLOBAL ===== */
+body {
+  background: #0f172a;
+  color: #fff;
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+
+  /* 🔥 DARK/LIGHT MODE ANIMATION */
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+/* Animate major sections */
+.sidebar,
+.main-content,
+.card-box,
+.topbar {
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+/* ===== SIDEBAR MENU ACTIVE INDICATOR ===== */
+.menu-item.active {
+  background: #22c55e;
+  color: #000 !important;
+  font-weight: 600;
+}
+
+/* Light mode active indicator */
+.light-mode .menu-item.active {
+  background: #020617;
+  color: #ffffff !important;
+}
+
+/* ===== APP LAYOUT (SCROLL FIX) ===== */
+.app-layout {
+  height: 100vh;
+  overflow: hidden;
+  /* Prevent window scroll */
+  width: 100%;
+}
+
+.app-layout .sidebar {
+  height: 100%;
+  overflow-y: auto;
+  min-height: 0 !important;
+  /* Override min-height: 100vh */
+  /* Hide scrollbar for sidebar if preferred, or keep standard */
+}
+
+.app-layout .main-content {
+  height: 100%;
+  overflow-y: auto;
+  width: auto !important;
+  /* Fix for horizontal overflow */
+}
+
+
+/* ===== LOGIN PAGE ===== */
+.login-page {
+  /* Inherit background from body for consistency */
+  min-height: 100vh;
+}
+
+/* Glassmorphism Login Card */
+.login-card {
+  background: #111827;
+  /* Match dashboard cards */
+  padding: 40px 30px;
+  border-radius: 16px;
+  width: 100%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.8s ease-in-out;
+  border: 1px solid #1f2937;
+  /* Match dashboard border */
+}
+
+.light-mode .login-card {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+/* Custom Input Fields */
+.custom-input {
+  background: #1e293b;
+  border: 1px solid #334155;
+  color: #fff;
+  border-radius: 8px;
+  padding: 10px 15px;
+}
+
+.custom-input::placeholder {
+  color: #64748b;
+}
+
+.custom-input:focus {
+  background: #1e293b;
+  border-color: #22c55e;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+  color: #fff;
+}
+
+/* Light Mode Overrides for Inputs */
+.light-mode .custom-input {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+}
+
+.light-mode .custom-input:focus {
+  background: #fff;
+  border-color: #22c55e;
+  color: #0f172a;
+}
+
+/* Login Button */
+.login-btn {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  border: none;
+  padding: 10px;
+  font-weight: 600;
+  border-radius: 30px;
+  color: #000;
+  transition: all 0.3s ease;
+}
+
+.login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(34, 197, 94, 0.4);
+}
+
+/* Login Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Login Logo */
+.login-logo {
+  width: 80px;
+  height: auto;
+  margin-bottom: 10px;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.6));
+}
+
+/* ===== TOGGLE BUTTON ===== */
+.toggle-btn {
+  background: #1e293b;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 30px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.toggle-btn.active {
+  background: #22c55e;
+  color: #000;
+}
+
+/* ===== LOGIN BUTTON (TOPBAR) ===== */
+.login-nav-btn {
+  background: transparent;
+  border: 1px solid #22c55e;
+  color: #22c55e;
+  padding: 6px 16px;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.login-nav-btn:hover {
+  background: #22c55e;
+  color: #000;
+}
+
+/* ===== LIGHT MODE ===== */
+.light-mode {
+  background: #f8fafc;
+  color: #000;
+}
+
+.light-mode .card-box,
+.light-mode .sidebar,
+.light-mode .login-card {
+  background: #e5e7eb;
+  color: #000;
+  border-color: transparent;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  width: 220px;
+  background: #020617;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Sidebar Logo */
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.sidebar-logo img {
+  width: 40px;
+  height: auto;
+}
+
+.sidebar-logo span {
+  font-weight: 600;
+  color: inherit;
+}
+
+/* DARK MODE (default) */
+body:not(.light-mode) .sidebar-logo span {
+  color: #ffffff;
+}
+
+/* LIGHT MODE */
+.light-mode .sidebar-logo span {
+  color: #000000;
+}
+
+/* Sidebar Menu */
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  padding: 12px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.3s;
+  color: inherit;
+}
+
+/* DARK MODE (default) */
+body:not(.light-mode) .sidebar ul li {
+  color: #ffffff;
+}
+
+/* LIGHT MODE */
+.light-mode .sidebar ul li {
+  color: #000000;
+}
+
+.sidebar ul li:hover {
+  background: #1e293b;
+  color: #ffffff;
+}
+
+/* ===== MAIN CONTENT ===== */
+/* ===== MAIN CONTENT ===== */
+.main-content {
+  flex: 1;
+  padding: 20px;
+  display: block !important;
+  /* Force vertical stacking */
+  overflow-x: hidden;
+}
+
+/* Fix Table Headers in Dark Mode */
+body:not(.light-mode) .table {
+  color: #fff;
+  --bs-table-bg: transparent;
+  /* Remove default white bg from bootstrap */
+}
+
+body:not(.light-mode) .table thead th {
+  color: #9ca3af;
+  /* Gray-400 */
+  border-bottom-color: #374151;
+  background-color: #111827;
+  /* Match card background */
+}
+
+body:not(.light-mode) .table td {
+  border-bottom-color: #1f2937;
+  /* Very dark border */
+  background-color: transparent;
+}
+
+body:not(.light-mode) .table-hover tbody tr:hover {
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* ===== TOP BAR ===== */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  color: #ffffff;
+}
+
+.topbar-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.light-mode .topbar {
+  color: #0f172a;
+}
+
+/* ===== BANNER / SLIDESHOW ===== */
+.banner {
+  height: 260px;
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+}
+
+.banner-img {
+  height: 260px;
+  object-fit: cover;
+}
+
+.banner-text {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  color: #ffffff;
+  font-size: 28px;
+  font-weight: 700;
+  text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.6);
+}
+
+/* ===== DASHBOARD CARDS ===== */
+.card-box {
+  background: #111827;
+  padding: 30px 20px;
+  /* Increased padding */
+  border-radius: 12px;
+  transition: transform 0.3s, box-shadow 0.3s;
+  color: #ffffff;
+  border: 1px solid #1f2937;
+  /* Add border for visibility */
+  text-align: center;
+  /* Center text */
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100px;
+  /* Ensure strictly equal height */
+}
+
+.card-box:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+}
+
+.light-mode .card-box {
+  background: #ffffff;
+  color: #0f172a;
+  border-color: #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.light-mode .card-box:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* Fix for invisible dash/separator in light mode */
+.light-mode .card-box .border-bottom {
+  border-color: #cbd5e1 !important;
+}
+
+
+
+
+/* ===== STUDENT DASHBOARD ===== */
+
+/* Search Bar */
+.search-bar .input-group-text,
+.search-bar .form-control {
+  background: #1e293b;
+  color: #fff;
+  border-top: 1px solid #334155;
+  border-bottom: 1px solid #334155;
+}
+
+.search-bar .input-group-text {
+  border-left: 1px solid #334155;
+  border-right: none;
+  /* Seamless join */
+}
+
+.search-bar .form-control {
+  border-right: 1px solid #334155;
+  border-left: none;
+  /* Seamless join */
+}
+
+/* Focus State - Green Highlight like Login Page */
+.search-bar:focus-within .input-group-text,
+.search-bar:focus-within .form-control {
+  border-color: #22c55e !important;
+}
+
+.search-bar:focus-within .form-control {
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2) !important;
+}
+
+.search-bar:focus-within .input-group-text {
+  border-right: none !important;
+}
+
+.light-mode .search-bar .input-group-text,
+.light-mode .search-bar .form-control {
+  background: #f8fafc !important;
+  color: #334155;
+  border-color: #cbd5e1 !important;
+}
+
+/* Ensure Inner Borders stay removed in light mode */
+.light-mode .search-bar .input-group-text {
+  border-right: none !important;
+}
+
+.light-mode .search-bar .form-control {
+  border-left: none !important;
+}
+
+/* Light Mode Focus - Green as well */
+.light-mode .search-bar:focus-within .input-group-text,
+.light-mode .search-bar:focus-within .form-control {
+  border-color: #22c55e !important;
+}
+
+.search-bar .input-group {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Stat Cards */
+.stat-card {
+  background: #111827;
+  padding: 24px;
+  border-radius: 16px;
+  height: 100%;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid #1f2937;
+  position: relative;
+  overflow: hidden;
+}
+
+.light-mode .stat-card {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+  border-color: #374151;
+}
+
+.light-mode .stat-card:hover {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  border-color: #cbd5e1;
+}
+
+/* Icon Animation in Stat Card */
+.stat-card .rounded-circle {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.stat-card:hover .rounded-circle {
+  transform: scale(1.15) rotate(5deg);
+}
+
+/* Content Cards (Widgets) */
+.content-card {
+  background: #111827;
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid #1f2937;
+}
+
+.light-mode .content-card {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  color: #0f172a;
+}
+
+/* List Items (Classes, Assignments) */
+.class-item,
+.assignment-item {
+  background: #1f2937;
+  transition: transform 0.2s;
+}
+
+.light-mode .class-item,
+.light-mode .assignment-item {
+  background: #ffffff;
+  border: 1px solid #e2e8f0 !important;
+}
+
+.class-item:hover,
+.assignment-item:hover {
+  transform: scale(1.01);
+}
+
+/* Progress Bars */
+.progress {
+  background-color: #374151;
+  border-radius: 10px;
+}
+
+.light-mode .progress {
+  background-color: #e2e8f0;
+}
+
+/* List Group Items */
+.list-group-item {
+  border-color: #374151;
+  color: #fff;
+}
+
+.light-mode .list-group-item {
+  border-color: #e2e8f0;
+  color: #0f172a;
+}
+
+
+/* Text Colors in Light Mode */
+.light-mode h2,
+.light-mode h3,
+.light-mode h5,
+.light-mode h6 {
+  color: #0f172a;
+}
+
+.light-mode .text-white-50 {
+  color: #64748b !important;
+}
+
+.light-mode .text-muted {
+  color: #64748b !important;
+}
+
+/* ===== TEXT FLIPPING (White in Dark, Black in Light) ===== */
+.logo-text,
+.profile-text,
+.badge-themed,
+.badge-inprogress,
+.text-muted-custom {
+  color: #fff;
+  /* Default Dark Mode */
+}
+
+/* Logo Subtitle */
+.logo-subtitle,
+.text-muted-custom {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* DARK MODE TEXT VISIBILITY FIXES */
+/* Ensure headers inside cards are white in dark mode */
+body:not(.light-mode) .stat-card h3,
+body:not(.light-mode) .content-card h5,
+body:not(.light-mode) .content-card h6,
+body:not(.light-mode) .list-group-item .fw-bold,
+body:not(.light-mode) .content-card .fw-bold {
+  /* Added generic fw-bold within content-card for Course Progress */
+  color: #fff !important;
+}
+
+/* Lighten the muted text in dark mode so it's readable */
+body:not(.light-mode) .stat-card .text-muted,
+body:not(.light-mode) .content-card .text-muted,
+body:not(.light-mode) .card-box .text-muted,
+body:not(.light-mode) .content-card .text-secondary,
+body:not(.light-mode) .list-group-item .text-muted,
+
+body:not(.light-mode) .login-card .text-muted {
+  /* Added login-card */
+  color: #94a3b8 !important;
+  /* Lighter gray/slate-400 */
+}
+
+
+/* LIGHT MODE OVERRIDES */
+/* Fix Today's Classes and Assignments Visibility in Light Mode */
+.light-mode .class-item,
+.light-mode .assignment-item,
+.light-mode .class-item h6,
+.light-mode .assignment-item h6,
+/* ===== ATTENDANCE PAGE ===== */
+
+/* Custom Table */
+.custom-table {
+  color: #fff;
+  margin-bottom: 0;
+}
+
+.custom-table th {
+  border-bottom: 1px solid #334155;
+  font-weight: 500;
+  padding-bottom: 15px;
+}
+
+.custom-table td {
+  border: none;
+  padding: 15px 5px;
+  background: transparent !important;
+  /* Ensure generic bootstrap styles don't override */
+  color: inherit;
+}
+
+.custom-table tr:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* Light Mode Table Overrides */
+.light-mode .custom-table {
+  color: #0f172a;
+}
+
+.light-mode .custom-table th {
+  border-color: #e2e8f0;
+}
+
+.light-mode .custom-table tr:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+
+/* Presence Badges */
+.badge-presence-present {
+  background-color: #000;
+  color: #fff;
+  border-radius: 30px;
+  padding: 6px 14px;
+  font-weight: 500;
+  min-width: 80px;
+  text-transform: capitalize;
+}
+
+.badge-presence-absent {
+  background-color: #ef4444;
+  /* Red-500 */
+  color: #fff;
+  border-radius: 30px;
+  padding: 6px 14px;
+  font-weight: 500;
+  min-width: 80px;
+  text-transform: capitalize;
+}
+
+/* Light Mode Badge Adjustment */
+.light-mode .badge-presence-present {
+  background-color: #0f172a;
+  /* Keep it dark for "Present" */
+}
+
+.light-mode .content-card .fw-bold {
+  color: #000 !important;
+}
+
+/* Ensure muted/secondary text in these cards is visible in Light Mode */
+.light-mode .class-item .text-muted,
+.light-mode .assignment-item .text-muted,
+.light-mode .class-item .text-secondary,
+.light-mode .assignment-item .text-secondary {
+  color: #475569 !important;
+  /* Slate-600 */
+}
+
+/* Keep Bootstrap colors if explicitly needed (like text-danger) unless overshadowed */
+.light-mode .text-danger {
+  color: #dc3545 !important;
+}
+
+.light-mode .logo-text,
+.light-mode .profile-text {
+  color: #000 !important;
+}
+
+.light-mode .logo-subtitle,
+.light-mode .text-muted-custom {
+  color: #64748b !important;
+}
+
+/* BADGES (Button-like) */
+.badge-themed {
+  background-color: #000;
+  color: #fff;
+}
+
+.light-mode .badge-themed {
+  background-color: #e2e8f0;
+  color: #000;
+  /* Black text in Light Mode as requested */
+  border: 1px solid #cbd5e1;
+}
+
+/* In Progress Badge */
+.badge-inprogress {
+  background-color: #000;
+  color: #fff;
+}
+
+.light-mode .badge-inprogress {
+  background-color: #f1f5f9;
+  color: #000;
+  /* Black text in Light Mode as requested */
+  border: 1px solid #cbd5e1;
+}
+
+/* Not Started Badge */
+.badge-notstarted {
+  background-color: #f8fafc;
+  color: #000;
+}
+
+.light-mode .badge-notstarted {
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #cbd5e1;
+}
+
+/* Generic Button Text Fix */
+button,
+.btn {
+  transition: color 0.3s;
+}
+
+/* Ensure toggle button icon flips if text flips */
+.light-mode .toggle-btn:not(.active) {
+  color: #000;
+}
+
+/* Note: toggle-btn active state is already handled above to be black text */
+
+/* ===== LATEST NEWS ===== */
+.news-list li a {
+  padding: 8px;
+  border-radius: 8px;
+  transition: background 0.3s;
+  color: #fff;
+  text-decoration: none;
+}
+
+
+.news-list li a:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.light-mode .news-list li a:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.light-mode .news-list li a {
+  color: #0f172a !important;
+}
+
+.light-mode .news-list li a .text-white {
+  color: #0f172a !important;
+}
+
+/* ===== VIRTUAL TOUR ===== */
+.virtual-tour-thumb {
+  cursor: pointer;
+  border: 1px solid #1f2937;
+}
+
+.light-mode .virtual-tour-thumb {
+  border-color: #e2e8f0;
+}
+
+.virtual-tour-thumb .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  transition: background 0.3s;
+  color: #fff;
+}
+
+.virtual-tour-thumb:hover .overlay {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.play-btn {
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  color: #fff;
+  transition: transform 0.3s, background 0.3s;
+  border: 2px solid #fff;
+}
+
+.virtual-tour-thumb:hover .play-btn {
+  transform: scale(1.1);
+  background: #22c55e;
+  border-color: #22c55e;
+}
+
+
+/* ===== CAMPUS EVENTS ===== */
+.event-date {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #1f2937;
+  border: 1px solid #374151;
+}
+
+.light-mode .event-date {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+/* ===== TIMETABLE ===== */
+.subject-card {
+  background: #e0f2fe;
+  /* Light Blue tint for cards */
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid #bae6fd;
+  height: 100%;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-align: left;
+}
+
+/* Dark Mode Override for Cards */
+body:not(.light-mode) .subject-card {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+.subject-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.subject-name {
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 5px;
+  color: #0f172a;
+  /* Dark text for light mode */
+}
+
+body:not(.light-mode) .subject-name {
+  color: #fff;
+}
+
+.subject-teacher {
+  font-size: 0.85rem;
+  color: #475569;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+body:not(.light-mode) .subject-teacher {
+  color: #9ca3af;
+}
+
+.teacher-avatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+.subject-room {
+  font-size: 0.8rem;
+  color: #ef4444;
+  /* Red-500 */
+}
+
+.lunch-break {
+  background: #f1f5f9;
+  padding: 12px;
+  border-radius: 30px;
+  color: #64748b;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #e2e8f0;
+}
+
+body:not(.light-mode) .lunch-break {
+  background: #1f2937;
+  border-color: #374151;
+  color: #9ca3af;
+}
+
+/* Fix for btn-outline-light in Light Mode */
+.light-mode .btn-outline-light {
+  color: #0f172a;
+  border-color: #cbd5e1;
+}
+
+/* ===== ACADEMIC PAGE (Redesign) ===== */
+.academic-stat-card {
+  background: #fff;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  border: 1px solid #e2e8f0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+body:not(.light-mode) .academic-stat-card {
+  background: #111827;
+  border-color: #1f2937;
+  color: #fff;
+}
+
+.stat-icon {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+body:not(.light-mode) .stat-value {
+  color: #fff;
+}
+
+/* Chart Canvas Container */
+canvas {
+  max-width: 100%;
+}
+
+/* Ensure charts look good in dark mode */
+/* Placeholder removed */
+
+/* Light Mode Badges Fix */
+.light-mode .badge.bg-black {
+  background-color: #0f172a !important;
+  /* Slate-900 */
+}
+
+/* Button Link Fix for Dark Mode */
+.btn-link {
+  color: #2563eb;
+}
+
+body:not(.light-mode) .btn-link {
+  color: #60a5fa;
+}
+
+/* Content Card (for Charts/Tables) */
+.content-card {
+  background: #fff;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+}
+
+body:not(.light-mode) .content-card {
+  background: #111827;
+  border-color: #1f2937;
+  color: #fff;
+}
+
+/* Neutral Badge for Dark Mode Compatibility */
+.badge-neutral {
+  background-color: #f1f5f9;
+  color: #0f172a;
+  border: 1px solid #e2e8f0;
+}
+
+body:not(.light-mode) .badge-neutral {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Fix global text-dark override being too aggressive */
+/* Fix global text-dark override being too aggressive */
+body:not(.light-mode) .text-dark {
+  color: #f1f5f9 !important;
+}
+
+/* Fix for Light Badges in Dark Mode (e.g. B+ Grade) */
+body:not(.light-mode) .badge.bg-light {
+  color: #000 !important;
+}
+
+/* Fix Table Headers in Dark Mode */
+body:not(.light-mode) .table {
+  color: #fff;
+  --bs-table-bg: transparent;
+}
+
+body:not(.light-mode) .table thead th {
+  color: #9ca3af;
+  border-bottom-color: #374151;
+  background-color: #111827;
+  /* Match card bg */
+}
+
+body:not(.light-mode) .table td {
+  border-bottom-color: #1f2937;
+  background-color: transparent;
+}
+
+body:not(.light-mode) .table-hover tbody tr:hover {
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* ===== NOTIFICATIONS PAGE ===== */
+.notifications-card-fix {
+  height: auto;
+  /* Override default height: 100% to allow content to grow */
+}
+
+/* Notification Item - Floating Card Style */
+.notification-item {
+  position: relative;
+  background: #1f2937;
+  /* Dark mode card bg - Lighter than container */
+  border: 1px solid #374151;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.light-mode .notification-item {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.notification-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+  border-color: #374151;
+  z-index: 1;
+}
+
+.light-mode .notification-item:hover {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+  border-color: #cbd5e1;
+}
+
+/* Unread State Styling */
+.notification-item.unread {
+  background: rgba(30, 41, 59, 0.7);
+  border-left: 4px solid #3b82f6;
+  /* Accent Border */
+}
+
+.light-mode .notification-item.unread {
+  background: #f0f9ff;
+  /* Light blue tint */
+  border-left: 4px solid #3b82f6;
+  border-top: 1px solid #e0f2fe;
+  border-right: 1px solid #e0f2fe;
+  border-bottom: 1px solid #e0f2fe;
+}
+
+/* Unread Dot Indicator */
+.unread-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #3b82f6;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+}
+
+/* Header inside notification */
+.notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.notification-title {
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: #f1f5f9;
+  margin-bottom: 4px;
+}
+
+.light-mode .notification-title {
+  color: #0f172a;
+}
+
+.notification-time {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Notification Body Text */
+.notification-body {
+  color: #9ca3af;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  padding-left: 16px;
+  /* Indent to align with text */
+}
+
+.light-mode .notification-body {
+  color: #64748b;
+}
+
+/* Badges for Notification Types */
+.badge-pill-custom {
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* INFO */
+.badge-info-subtle {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.light-mode .badge-info-subtle {
+  background-color: #eff6ff;
+  color: #2563eb;
+  border-color: #dbeafe;
+}
+
+/* ALERT */
+.badge-alert-subtle {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.light-mode .badge-alert-subtle {
+  background-color: #fef2f2;
+  color: #dc2626;
+  border-color: #fee2e2;
+}
+
+/* WARNING */
+.badge-warning-custom {
+  background-color: #000;
+  color: #fff;
+  border: 1px solid #333;
+}
+
+.light-mode .badge-warning-custom {
+  background-color: #0f172a;
+  /* Dark for contrast */
+  color: #fff;
+}
+
+/* EVENT */
+.badge-event-subtle {
+  background-color: rgba(34, 197, 94, 0.1);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.light-mode .badge-event-subtle {
+  background-color: #f0fdf4;
+  color: #16a34a;
+  border-color: #dcfce7;
+}
+
+
+/* Mark as Read Button */
+.btn-mark-read {
+  background: #ffffff;
+  color: #0f172a;
+  border: 1px solid #e2e8f0;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.btn-mark-read:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+body:not(.light-mode) .btn-mark-read {
+  background: rgba(255, 255, 255, 0.05);
+  /* Transparent dark mode */
+  color: #f1f5f9;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body:not(.light-mode) .btn-mark-read:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+
+/* ===== QUESTION BANK PAGE ===== */
+
+/* Filter Inputs */
+.filter-input-group .input-group-text {
+  background: #1f2937;
+  color: #fff;
+  border: 1px solid #374151;
+  border-right: none;
+}
+
+.filter-input {
+  background: #1f2937;
+  color: #fff;
+  border: 1px solid #374151;
+  border-left: none;
+}
+
+.filter-input::placeholder {
+  color: #9ca3af;
+}
+
+.filter-input:focus {
+  background: #1f2937;
+  color: #fff;
+  border-color: #374151;
+  box-shadow: none;
+}
+
+.filter-select {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #0f172a;
+}
+
+/* Dark Mode Select Override */
+body:not(.light-mode) .filter-select {
+  background-color: #1f2937;
+  /* Dark background */
+  border-color: #374151;
+  color: #fff;
+}
+
+
+/* Light Mode Overrides for Filters */
+.light-mode .filter-input-group .input-group-text,
+.light-mode .filter-input {
+  background: #f8fafc;
+  color: #0f172a;
+  border-color: #cbd5e1;
+}
+
+.light-mode .filter-input::placeholder {
+  color: #94a3b8;
+}
+
+
+/* Question Card */
+.question-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.2s ease;
+}
+
+body:not(.light-mode) .question-card {
+  background: #1f2937;
+  /* Dark container */
+  border-color: #374151;
+  color: #fff;
+}
+
+.question-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Icon Wrapper */
+.doc-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  background-color: #eff6ff;
+  /* Light blue bg */
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+body:not(.light-mode) .doc-icon-wrapper {
+  background-color: rgba(59, 130, 246, 0.2);
+  /* Dark mode tint */
+}
+
+
+/* Download Button */
+.btn-download {
+  background: #000;
+  color: #fff;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-download:hover {
+  background: #333;
+  color: #fff;
+}
+
+/* Dark Mode Download Button Flip */
+body:not(.light-mode) .btn-download {
+  background: #fff;
+  /* High contrast */
+  color: #000;
+}
+
+body:not(.light-mode) .btn-download:hover {
+  background: #f3f4f6;
+  color: #000;
+}
+
+
+/* ===== FEE PAYMENT PAGE ===== */
+
+/* Text Orange Utility */
+.text-orange {
+  color: #f97316 !important;
+}
+
+/* Light orange override for pending fee cards */
+.pending-fee-card {
+  background-color: #fff7ed;
+  border: 1px solid #ffedd5;
+  border-radius: 12px;
+}
+
+body:not(.light-mode) .pending-fee-card {
+  background-color: rgba(249, 115, 22, 0.1);
+  /* Dark mode orange tint */
+  border-color: rgba(249, 115, 22, 0.2);
+}
+
+/* Black Badge for "Paid" & "Completed" */
+.badge-paid {
+  background-color: #000;
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-weight: 500;
+}
+
+body:not(.light-mode) .badge-paid {
+  background-color: #fff;
+  color: #000;
+}
+
+/* Pay Now / Download Receipt Button (Black) */
+.btn-black {
+  background-color: #000;
+  color: #fff;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-black:hover {
+  background-color: #333;
+  color: #fff;
+}
+
+body:not(.light-mode) .btn-black {
+  background-color: #fff;
+  color: #000;
+}
+
+body:not(.light-mode) .btn-black:hover {
+  background-color: #f3f4f6;
+  color: #000;
+}
+
+/* Custom Fee Table Adjustments */
+.custom-fee-table th {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.custom-fee-table td {
+  font-size: 0.95rem;
+}
+
+/* Dark Mode Table Text Fixes */
+body:not(.light-mode) .custom-fee-table th.text-dark,
+body:not(.light-mode) .pending-fee-card .text-dark,
+body:not(.light-mode) .custom-fee-table td {
+  color: #fff !important;
+}

@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Admin Notifications | Cruz Horizon{% endblock %}
+{% block portal_name %}Admin Portal{% endblock %}
+
+{% block sidebar %}
+{% include 'partials/sidebar_admin.html' %}
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-end mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">Push Notifications</h2>
+        <p class="text-white-50">Send announcements to students and teachers</p>
+    </div>
+    <div>
+        <button class="btn btn-black" data-bs-toggle="modal" data-bs-target="#composeModal">Compose New</button>
+    </div>
+</div>
+
+<!-- Recent Announcements -->
+<div class="content-card">
+    <h5 class="fw-bold mb-4">Recent Announcements</h5>
+    {% for n in notifications %}
+    <div class="border rounded p-3 mb-2">
+        <div class="d-flex justify-content-between">
+            <div class="fw-bold">{{ n.message }}</div>
+            <span class="text-muted small">{{ n.created_at|date:"d M Y" }}</span>
+        </div>
+        <div class="small text-muted">Sent to: {% if n.user %}{{ n.user.name }} ({{ n.user.get_role_display }}){% else
+            %}Everyone{% endif %}</div>
+    </div>
+    {% empty %}
+    <p class="text-muted text-center py-4">No announcements sent yet.</p>
+    {% endfor %}
+</div>
+
+<!-- Compose Modal -->
+<div class="modal fade" id="composeModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Compose Notification</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="{% url 'post_notification' %}" method="POST">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Target Audience</label>
+                        <select name="target_role" class="form-select" required>
+                            <option value="ALL">All Users</option>
+                            <option value="STUDENT">Students Only</option>
+                            <option value="TEACHER">Teachers Only</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Message</label>
+                        <textarea name="message" class="form-control" rows="4" required
+                            placeholder="Type your announcement here..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-black">Send Notification</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

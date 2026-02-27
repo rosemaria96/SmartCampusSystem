@@ -1,0 +1,154 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Academics | Cruz Horizon</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+    <div class="d-flex">
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+
+            <!-- Logo -->
+            <div class="sidebar-logo">
+                <img src="{% static 'assets/logo.png' %}" alt="Cruz Horizon Logo" style="width: 40px; height: auto;">
+                <div class="ms-2">
+                    <div class="fw-bold fs-5 logo-text">Cruz Horizon</div>
+                </div>
+            </div>
+
+            <ul class="menu">
+                <li class="menu-item" onclick="window.location.href='{% url 'home' %}'"><i
+                        class="bi bi-house-door-fill me-2"></i> Home</li>
+                <li class="menu-item active" onclick="window.location.href='{% url 'dashboard_academics' %}'"><i
+                        class="bi bi-book-fill me-2"></i> Academics</li>
+                <li class="menu-item" onclick="window.location.href='{% url 'about_us' %}'"><i
+                        class="bi bi-info-circle-fill me-2"></i> About Us</li>
+                <li class="menu-item" onclick="window.location.href='{% url 'help' %}'"><i
+                        class="bi bi-question-circle-fill me-2"></i> Help</li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+
+            <!-- Top Navbar -->
+            <div class="topbar">
+                <!-- Mobile Toggle -->
+                <button id="mobile-sidebar-toggle" class="btn btn-link d-lg-none me-2 p-0">
+                    <i class="bi bi-list fs-1"></i>
+                </button>
+                <span>Academics</span>
+
+                <div class="topbar-actions">
+                    <button class="login-nav-btn" onclick="goToLogin()">Login</button>
+                    <button id="toggleBtn" class="toggle-btn"><i class="bi bi-moon-fill"></i></button>
+                </div>
+            </div>
+
+            <!-- Admissions Banner -->
+            <div class="card-box d-block p-5 mb-4 position-relative overflow-hidden"
+                style="background: linear-gradient(135deg, #1e3a8a, #3b82f6);">
+                <div class="position-relative z-1 text-white">
+                    <h1 class="fw-bold mb-2">Admissions Open 2026</h1>
+                    <p class="fs-5 mb-4">Shape your future with our world-class verification-focused programs.</p>
+                    <button class="btn btn-light rounded-pill px-4 fw-bold text-primary">Apply Now</button>
+                </div>
+                <!-- Decorative background element -->
+                <i class="bi bi-mortarboard-fill position-absolute text-white"
+                    style="font-size: 15rem; opacity: 0.1; right: -20px; bottom: -40px;"></i>
+            </div>
+
+            <h4 class="fw-bold mb-4">Our Programs</h4>
+
+            <!-- Course Grid -->
+            <div class="row g-4">
+
+                <!-- BCA -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="content-card h-100 d-flex flex-column">
+                        <div class="mb-3">
+                            <span class="badge bg-primary mb-2">Undergraduate</span>
+                            <h5 class="fw-bold">B.C.A</h5>
+                            <div class="text-muted small">Bachelor of Computer Applications</div>
+                        </div>
+                        <div class="mt-auto">
+                            <div class="d-flex align-items-center text-muted small mb-3">
+                                <i class="bi bi-clock me-2"></i> 3 Years | Full Time
+                            </div>
+                            <button class="btn btn-outline-primary w-100 rounded-pill">View Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BSc -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="content-card h-100 d-flex flex-column">
+                        <div class="mb-3">
+                            <span class="badge bg-primary mb-2">Undergraduate</span>
+                            <h5 class="fw-bold">B.Sc</h5>
+                            <div class="text-muted small">Bachelor of Science (CS)</div>
+                        </div>
+                        <div class="mt-auto">
+                            <div class="d-flex align-items-center text-muted small mb-3">
+                                <i class="bi bi-clock me-2"></i> 3 Years | Full Time
+                            </div>
+                            <button class="btn btn-outline-primary w-100 rounded-pill">View Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MCA -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="content-card h-100 d-flex flex-column">
+                        <div class="mb-3">
+                            <span class="badge bg-success mb-2">Postgraduate</span>
+                            <h5 class="fw-bold">M.C.A</h5>
+                            <div class="text-muted small">Master of Computer Applications</div>
+                        </div>
+                        <div class="mt-auto">
+                            <div class="d-flex align-items-center text-muted small mb-3">
+                                <i class="bi bi-clock me-2"></i> 2 Years | Full Time
+                            </div>
+                            <button class="btn btn-outline-success w-100 rounded-pill">View Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MSc -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="content-card h-100 d-flex flex-column">
+                        <div class="mb-3">
+                            <span class="badge bg-success mb-2">Postgraduate</span>
+                            <h5 class="fw-bold">M.Sc</h5>
+                            <div class="text-muted small">Master of Science (Data Sc.)</div>
+                        </div>
+                        <div class="mt-auto">
+                            <div class="d-flex align-items-center text-muted small mb-3">
+                                <i class="bi bi-clock me-2"></i> 2 Years | Full Time
+                            </div>
+                            <button class="btn btn-outline-success w-100 rounded-pill">View Details</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script src="{% static 'js/dashboard.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

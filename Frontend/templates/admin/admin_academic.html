@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Admin Academic | Cruz Horizon{% endblock %}
+{% block portal_name %}Admin Portal{% endblock %}
+
+{% block sidebar %}
+{% include 'partials/sidebar_admin.html' %}
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
+    <div>
+        <h2 class="fw-bold mb-1">Academic Management</h2>
+        <p class="text-white-50">Manage academic records and generate reports</p>
+    </div>
+    <div>
+        <button class="btn btn-outline-secondary me-2">Generate Hall Tickets</button>
+        <button class="btn btn-black">Download Reports</button>
+    </div>
+</div>
+
+<!-- Stats Cards -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3 col-sm-6">
+        <div class="card-box d-flex flex-column align-items-start justify-content-center p-4">
+            <div class="text-muted-custom mb-1" style="font-size: 0.9rem;">Total Students</div>
+            <h2 class="fw-bold mb-0 text-primary">2,543</h2>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="card-box d-flex flex-column align-items-start justify-content-center p-4">
+            <div class="text-muted-custom mb-1" style="font-size: 0.9rem;">Avg. GPA</div>
+            <h2 class="fw-bold mb-0 text-success">3.6</h2>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="card-box d-flex flex-column align-items-start justify-content-center p-4">
+            <div class="text-muted-custom mb-1" style="font-size: 0.9rem;">Pass Rate</div>
+            <h2 class="fw-bold mb-0" style="color: #a855f7;">94%</h2>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="card-box d-flex flex-column align-items-start justify-content-center p-4">
+            <div class="text-muted-custom mb-1" style="font-size: 0.9rem;">Honors Students</div>
+            <h2 class="fw-bold mb-0 text-warning">421</h2>
+        </div>
+    </div>
+</div>
+
+<!-- Academic Structure -->
+<div class="row g-4">
+    <!-- Departments -->
+    <div class="col-md-12">
+        <div class="content-card">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="fw-bold mb-0">Departments</h5>
+                <a href="{% url 'add_department' %}" class="btn btn-sm btn-black"><i class="bi bi-plus-lg me-1"></i> Add
+                    New</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr class="text-muted small text-uppercase">
+                            <th class="ps-3">Name</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for dept in departments %}
+                        <tr>
+                            <td class="fw-medium ps-3">{{ dept.department_name }}</td>
+                            <td class="text-end">
+                                <a href="{% url 'edit_department' dept.id %}"
+                                    class="btn btn-link action-btn-color p-1"><i class="bi bi-pencil-square"></i></a>
+                                <a href="{% url 'delete_department' dept.id %}" class="btn btn-link text-danger p-1"
+                                    onclick="return confirm('Are you sure?')"><i class="bi bi-trash"></i></a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center text-muted">No departments found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Courses -->
+    <div class="col-md-6">
+        <div class="content-card h-100">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="fw-bold mb-0">Courses</h5>
+                <a href="{% url 'add_course' %}" class="btn btn-sm btn-black"><i class="bi bi-plus-lg me-1"></i> Add</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr class="text-muted small text-uppercase">
+                            <th class="ps-3">Name</th>
+                            <th>Duration</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for course in courses %}
+                        <tr>
+                            <td class="fw-medium ps-3">{{ course.course_name }}</td>
+                            <td class="text-muted">{{ course.duration_years }} Years</td>
+                            <td class="text-end">
+                                <a href="{% url 'edit_course' course.id %}" class="btn btn-link action-btn-color p-1"><i
+                                        class="bi bi-pencil-square"></i></a>
+                                <a href="{% url 'delete_course' course.id %}" class="btn btn-link text-danger p-1"
+                                    onclick="return confirm('Are you sure?')"><i class="bi bi-trash"></i></a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center text-muted">No courses found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Subjects -->
+    <div class="col-md-6">
+        <div class="content-card h-100">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="fw-bold mb-0">Subjects</h5>
+                <a href="{% url 'add_subject' %}" class="btn btn-sm btn-black"><i class="bi bi-plus-lg me-1"></i>
+                    Add</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr class="text-muted small text-uppercase">
+                            <th class="ps-3">Name</th>
+                            <th>Code</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for subject in subjects %}
+                        <tr>
+                            <td class="fw-medium ps-3">{{ subject.subject_name }}</td>
+                            <td class="text-muted">{{ subject.subject_code }}</td>
+                            <td class="text-end">
+                                <a href="{% url 'edit_subject' subject.id %}"
+                                    class="btn btn-link action-btn-color p-1"><i class="bi bi-pencil-square"></i></a>
+                                <a href="{% url 'delete_subject' subject.id %}" class="btn btn-link text-danger p-1"
+                                    onclick="return confirm('Are you sure?')"><i class="bi bi-trash"></i></a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center text-muted">No subjects found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

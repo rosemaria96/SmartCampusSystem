@@ -1,0 +1,107 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Fee Management | Cruz Horizon{% endblock %}
+{% block portal_name %}Admin Portal{% endblock %}
+
+{% block sidebar %}
+{% include 'partials/sidebar_admin.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-end mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">Fee Management</h2>
+        <p class="text-white-50">Manage student fees and collections</p>
+    </div>
+    <div>
+        <a href="{% url 'add_fee_structure' %}" class="btn btn-black"><i class="bi bi-plus-lg me-1"></i>Add Fee Structure</a>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <!-- Fee Structures -->
+    <div class="col-md-12">
+        <div class="content-card">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="fw-bold mb-0">Fee Structures</h5>
+                <a href="{% url 'add_fee_structure' %}" class="btn btn-sm btn-black"><i class="bi bi-plus-lg me-1"></i>Add New</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr class="text-muted small text-uppercase">
+                            <th class="ps-3">Course</th>
+                            <th>Semester</th>
+                            <th>Amount</th>
+                            <th>Due Date</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for fee in fee_structures %}
+                        <tr>
+                            <td class="fw-bold ps-3">{{ fee.course.course_name }}</td>
+                            <td>Semester {{ fee.semester.semester_number }}</td>
+                            <td class="fw-bold text-success">&#8377;{{ fee.total_amount }}</td>
+                            <td>{{ fee.due_date }}</td>
+                            <td class="text-end">
+                                <a href="{% url 'edit_fee_structure' fee.id %}" class="btn btn-link action-btn-color p-1"><i class="bi bi-pencil-square"></i></a>
+                                <a href="{% url 'delete_fee_structure' fee.id %}" class="btn btn-link text-danger p-1" onclick="return confirm('Are you sure?')"><i class="bi bi-trash"></i></a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">No fee structures defined.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Student Fee Records -->
+    <div class="col-md-12">
+        <div class="content-card">
+            <h5 class="fw-bold mb-4">Recent Student Fees</h5>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr class="text-muted small text-uppercase">
+                            <th class="ps-3">Student</th>
+                            <th>Fee Type</th>
+                            <th>Status</th>
+                            <th>Paid / Total</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sf in student_fees %}
+                        <tr>
+                            <td class="fw-medium ps-3">{{ sf.student.user.name }}</td>
+                            <td>{{ sf.fee_structure.course.course_name }} (Sem {{ sf.fee_structure.semester.semester_number }})</td>
+                            <td>
+                                {% if sf.status == 'PAID' %}
+                                <span class="badge bg-success">Paid</span>
+                                {% else %}
+                                <span class="badge bg-warning text-dark">{{ sf.status }}</span>
+                                {% endif %}
+                            </td>
+                            <td>&#8377;{{ sf.total_paid }} / &#8377;{{ sf.payable_amount }}</td>
+                            <td class="text-end">
+                                <a href="{% url 'edit_student_fee' sf.id %}" class="btn btn-link action-btn-color p-1"><i class="bi bi-pencil-square"></i></a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">No student fee records found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

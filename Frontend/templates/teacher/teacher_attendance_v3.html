@@ -1,0 +1,285 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Teacher Attendance | Cruz Horizon{% endblock %}
+{% block portal_name %}Teacher Portal{% endblock %}
+
+{% block extra_head %}
+<style>
+    .attendance-grid-container {
+        overflow-x: auto;
+    }
+
+    .attendance-cell {
+        cursor: pointer;
+        transition: background-color 0.2s;
+        text-align: center;
+        user-select: none;
+        min-width: 80px;
+    }
+
+    .attendance-cell.disabled {
+        background-color: #f8f9fa;
+        cursor: not-allowed;
+        color: #ddd;
+    }
+
+    .attendance-cell.enabled:hover {
+        background-color: #f0f0f0;
+    }
+
+    /* Status Colors */
+    .status-present {
+        color: #22c55e;
+        font-size: 1.2rem;
+    }
+
+    .status-absent {
+        color: #ef4444;
+        font-size: 1.2rem;
+    }
+
+    .status-none {
+        color: #ccc;
+    }
+
+    .session-check {
+        transform: scale(1.2);
+    }
+
+    .vertical-header {
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+        white-space: nowrap;
+        height: 100px;
+        padding: 5px;
+    }
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'partials/sidebar_teacher.html' %}
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
+    <div>
+        <h2 class="fw-bold mb-1">Mark Attendance</h2>
+        <p class="text-white-50">Weekly View: {{ start_of_week|date:"M d" }} - {{ end_of_week|date:"M d, Y" }}</p>
+    </div>
+</div>
+
+<div class="content-card">
+    <!-- Filters -->
+    <form method="GET" action="{% url 'take_attendance' %}" id="filterForm" class="mb-4">
+        <div class="row g-2 align-items-end">
+            <div class="col-md-3">
+                <label class="small text-muted mb-1">Course</label>
+                <select name="course" class="form-select form-select-sm"
+                    onchange="document.getElementById('filterForm').submit()">
+                    <option value="">Select Course</option>
+                    {% for course in courses %}
+                    <option value="{{ course.id }}" {% if selected_course_id == course.id %}selected{% endif %}>{{
+                        course.course_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="small text-muted mb-1">Semester</label>
+                <select name="semester" class="form-select form-select-sm"
+                    onchange="document.getElementById('filterForm').submit()">
+                    <option value="">Select Semester</option>
+                    {% for semester in semesters %}
+                    <option value="{{ semester.id }}" {% if selected_semester_id == semester.id %}selected{% endif %}>
+                        Semester {{ semester.semester_number }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="small text-muted mb-1">Subject</label>
+                <select name="subject" class="form-select form-select-sm"
+                    onchange="document.getElementById('filterForm').submit()">
+                    <option value="">Select Subject</option>
+                    {% for subject in subjects %}
+                    <option value="{{ subject.id }}" {% if selected_subject_id == subject.id %}selected{% endif %}>{{
+                        subject.subject_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <!-- Potential Week Selector could go here -->
+            </div>
+        </div>
+    </form>
+
+    {% if selected_subject_id and selected_semester_id %}
+    <form method="POST" id="attendanceForm">
+        {% csrf_token %}
+        <input type="hidden" name="subject" value="{{ selected_subject_id }}">
+        <input type="hidden" name="semester" value="{{ selected_semester_id }}">
+        <input type="hidden" name="course_id" value="{{ selected_course_id }}">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold mb-0">Weekly Grid</h5>
+            <button type="submit" class="btn btn-black"><i class="bi bi-save me-2"></i>Save Checklist</button>
+        </div>
+
+        <div class="attendance-grid-container">
+            <table class="table table-bordered align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th rowspan="2" class="align-middle">Roll No</th>
+                        <th rowspan="2" class="align-middle" style="min-width: 150px;">Student Name</th>
+
+                        <!-- Dynamic Columns based on Timetable -->
+                        {% for col in grid_columns %}
+                        <th class="text-center p-1 bg-white" style="border-bottom: none;">
+                            <div class="small fw-bold text-muted">{{ col.short_day }}</div>
+                            <div class="small">{{ col.date|date:"d M" }}</div>
+                            <div class="badge bg-light text-dark border">{{ col.start_time|time:"H:i" }}</div>
+                        </th>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        {% for col in grid_columns %}
+                        <th class="text-center bg-white" style="border-top: none;">
+                            <div class="form-check d-flex justify-content-center">
+                                <input type="checkbox" class="form-check-input session-check"
+                                    data-col-id="{{ col.date }}_{{ col.slot_id }}" title="Enable Session">
+                            </div>
+                        </th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in students_data %}
+                    <tr>
+                        <td class="text-muted small">{{ row.student.enrollment_number }}</td>
+                        <td class="fw-medium">{{ row.student.user.name }}</td>
+
+                        {% for cell in row.cells %}
+                        <td class="attendance-cell disabled" data-col-id="{{ cell.col_id }}"
+                            id="cell_{{ cell.input_name }}">
+
+                            <!-- Hidden Input -->
+                            <input type="hidden" name="{{ cell.input_name }}" id="input_{{ cell.input_name }}"
+                                value="{{ cell.status|default:'' }}">
+
+                            <!-- Visual Indicator -->
+                            <div class="status-icon">
+                                {% if cell.status == 'PRESENT' %}
+                                <i class="bi bi-check-circle-fill status-present"></i>
+                                {% elif cell.status == 'ABSENT' %}
+                                <i class="bi bi-x-circle-fill status-absent"></i>
+                                {% else %}
+                                <i class="bi bi-circle status-none"></i>
+                                {% endif %}
+                            </div>
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="{{ grid_columns|length|add:'2' }}" class="text-center py-4 text-muted">No students
+                            found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </form>
+    {% else %}
+    <div class="alert alert-info">Please select Course, Semester, and Subject to load the attendance grid.</div>
+    {% endif %}
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Toggle Column Enable/Disable
+        document.querySelectorAll('.session-check').forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                const colId = this.dataset.colId;
+                const cells = document.querySelectorAll(`.attendance-cell[data-col-id="${colId}"]`);
+
+                if (this.checked) {
+                    cells.forEach(cell => {
+                        cell.classList.remove('disabled');
+                        cell.classList.add('enabled');
+
+                        // If status is empty, set default to PRESENT
+                        const input = cell.querySelector('input[type="hidden"]');
+                        if (!input.value) {
+                            updateCellStatus(cell, 'PRESENT');
+                        }
+                    });
+                } else {
+                    cells.forEach(cell => {
+                        cell.classList.add('disabled');
+                        cell.classList.remove('enabled');
+                    });
+                }
+            });
+        });
+
+        // Handle Cell Click
+        document.querySelectorAll('.attendance-cell').forEach(cell => {
+            cell.addEventListener('click', function () {
+                if (this.classList.contains('disabled')) return;
+
+                const input = this.querySelector('input[type="hidden"]');
+                const currentStatus = input.value;
+
+                if (currentStatus === 'PRESENT') {
+                    updateCellStatus(this, 'ABSENT');
+                } else if (currentStatus === 'ABSENT') {
+                    if (confirm("Are you sure you want to mark this student as Present again?")) {
+                        updateCellStatus(this, 'PRESENT');
+                    }
+                } else {
+                    // Initial click if empty (though checkbox usually handles init)
+                    updateCellStatus(this, 'PRESENT');
+                }
+            });
+        });
+
+        function updateCellStatus(cell, status) {
+            const input = cell.querySelector('input[type="hidden"]');
+            const iconContainer = cell.querySelector('.status-icon');
+
+            input.value = status;
+
+            if (status === 'PRESENT') {
+                iconContainer.innerHTML = '<i class="bi bi-check-circle-fill status-present"></i>';
+            } else if (status === 'ABSENT') {
+                iconContainer.innerHTML = '<i class="bi bi-x-circle-fill status-absent"></i>';
+            } else {
+                iconContainer.innerHTML = '<i class="bi bi-circle status-none"></i>';
+            }
+        }
+
+        // Initialize checkboxes based on existing data (Optional: Check if any cell in col has value)
+        // For now, start unchecked to prevent accidental edits, unless user explicit interaction needed.
+        // Or if data exists, maybe check it?
+        // User said: "boxes are present by default" (meaning cells have checkbox UI or col is unchecked?)
+        // "click on enable session ... then that entire column opens"
+
+        // Let's check columns that already have ANY data
+        const cols = new Set();
+        document.querySelectorAll('input[type="hidden"]').forEach(input => {
+            if (input.value) {
+                const cell = input.closest('.attendance-cell');
+                if (cell) cols.add(cell.dataset.colId);
+            }
+        });
+
+        cols.forEach(colId => {
+            const checkbox = document.querySelector(`.session-check[data-col-id="${colId}"]`);
+            if (checkbox) {
+                checkbox.checked = true;
+                checkbox.dispatchEvent(new Event('change'));
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,309 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Teacher Attendance | Cruz Horizon{% endblock %}
+{% block portal_name %}Teacher Portal{% endblock %}
+
+{% block extra_head %}
+<style>
+    .attendance-grid-container { overflow-x: auto; }
+    .attendance-cell {
+        cursor: pointer;
+        transition: background-color 0.2s;
+        text-align: center;
+        user-select: none;
+        min-width: 80px;
+    }
+    .attendance-cell.disabled { background-color: #f8f9fa; cursor: not-allowed; color: #ddd; }
+    .attendance-cell.enabled:hover { background-color: #f0f0f0; }
+    .status-present { color: #22c55e; font-size: 1.2rem; }
+    .status-absent  { color: #ef4444; font-size: 1.2rem; }
+    .status-none    { color: #ccc; }
+    .session-check  { transform: scale(1.2); }
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'partials/sidebar_teacher.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
+    <div>
+        <h2 class="fw-bold mb-1">Mark Attendance</h2>
+        <p class="text-white-50">Weekly View: {{ start_of_week|date:"M d" }} - {{ end_of_week|date:"M d, Y" }}</p>
+    </div>
+</div>
+
+<div class="content-card">
+    <form method="GET" action="{% url 'take_attendance' %}" id="filterForm" class="mb-4">
+        <div class="row g-2 align-items-end">
+            <div class="col-md-3">
+                <label class="small text-muted mb-1">Course</label>
+                <select name="course" class="form-select form-select-sm" onchange="document.getElementById('filterForm').submit()">
+                    <option value="">Select Course</option>
+                    {% for course in courses %}
+                    <option value="{{ course.id }}" {% if selected_course_id == course.id %}selected{% endif %}>{{ course.course_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="small text-muted mb-1">Semester</label>
+                <select name="semester" class="form-select form-select-sm" onchange="document.getElementById('filterForm').submit()">
+                    <option value="">Select Semester</option>
+                    {% for semester in semesters %}
+                    <option value="{{ semester.id }}" {% if selected_semester_id == semester.id %}selected{% endif %}>Semester {{ semester.semester_number }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="small text-muted mb-1">Subject</label>
+                <select name="subject" class="form-select form-select-sm" onchange="document.getElementById('filterForm').submit()">
+                    <option value="">Select Subject</option>
+                    {% for subject in subjects %}
+                    <option value="{{ subject.id }}" {% if selected_subject_id == subject.id %}selected{% endif %}>{{ subject.subject_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+    </form>
+
+    {% if selected_subject_id and selected_semester_id %}
+    <form method="POST" id="attendanceForm">
+        {% csrf_token %}
+        <input type="hidden" name="subject" value="{{ selected_subject_id }}">
+        <input type="hidden" name="semester" value="{{ selected_semester_id }}">
+        <input type="hidden" name="course_id" value="{{ selected_course_id }}">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold mb-0">Weekly Grid</h5>
+            <div class="d-flex gap-2">
+                <button type="button" id="resetTableBtn" class="btn btn-outline-danger d-none" onclick="resetAttendanceTable()">
+                    <i class="bi bi-arrow-counterclockwise me-2"></i>Reset Table
+                </button>
+                <button type="submit" class="btn btn-black"><i class="bi bi-save me-2"></i>Save Checklist</button>
+            </div>
+        </div>
+
+        <div id="tableFullBanner" class="alert alert-warning d-flex align-items-center gap-2 d-none mb-3" role="alert">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <span>All sessions are fully marked. Click <strong>Reset Table</strong> to clear and enter new attendance.</span>
+        </div>
+
+        <div class="attendance-grid-container">
+            <table class="table table-bordered align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th rowspan="2" class="align-middle">Roll No</th>
+                        <th rowspan="2" class="align-middle" style="min-width:150px;">Student Name</th>
+                        {% for col in grid_columns %}
+                        <th class="text-center p-1 bg-white" style="border-bottom:none;">
+                            <div class="small fw-bold text-muted">{{ col.short_day }}</div>
+                            <div class="small">{{ col.date|date:"d M" }}</div>
+                            <div class="badge bg-light text-dark border">{{ col.start_time|time:"H:i" }}</div>
+                        </th>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        {% for col in grid_columns %}
+                        <th class="text-center bg-white" style="border-top:none;">
+                            <div class="form-check d-flex justify-content-center">
+                                <input type="checkbox" class="form-check-input session-check"
+                                    data-col-id="{{ col.date }}_{{ col.slot_id }}"
+                                    data-session-datetime="{{ col.date }}T{{ col.start_time|time:'H:i' }}"
+                                    title="Enable Session">
+                            </div>
+                        </th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in students_data %}
+                    <tr>
+                        <td class="text-muted small">{{ row.student.enrollment_number }}</td>
+                        <td class="fw-medium">{{ row.student.user.name }}</td>
+                        {% for cell in row.cells %}
+                        <td class="attendance-cell disabled" data-col-id="{{ cell.col_id }}" id="cell_{{ cell.input_name }}">
+                            <input type="hidden" name="{{ cell.input_name }}" id="input_{{ cell.input_name }}" value="{{ cell.status|default:'' }}">
+                            <div class="status-icon">
+                                {% if cell.status == 'PRESENT' %}
+                                <i class="bi bi-check-circle-fill status-present"></i>
+                                {% elif cell.status == 'ABSENT' %}
+                                <i class="bi bi-x-circle-fill status-absent"></i>
+                                {% else %}
+                                <i class="bi bi-circle status-none"></i>
+                                {% endif %}
+                            </div>
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="{{ grid_columns|length|add:'2' }}" class="text-center py-4 text-muted">No students found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </form>
+    {% else %}
+    <div class="alert alert-info">Please select Course, Semester, and Subject to load the attendance grid.</div>
+    {% endif %}
+</div>
+
+{% if messages %}
+<div class="position-fixed top-0 end-0 p-3" style="z-index:9999;">
+    <div id="attendanceToast" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body d-flex align-items-center gap-2">
+                <i class="bi bi-check-circle-fill fs-5"></i>
+                <span id="toastMessage"></span>
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<script>
+const djangoMessages = [
+    {% for message in messages %}
+    { text: "{{ message }}", tags: "{{ message.tags }}" }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+];
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    // --- Toast on save ---
+    if (typeof djangoMessages !== 'undefined' && djangoMessages.length > 0) {
+        const toastEl = document.getElementById('attendanceToast');
+        if (toastEl) {
+            const msg = djangoMessages[0];
+            toastEl.classList.add(msg.tags && msg.tags.includes('success') ? 'bg-success' : 'bg-danger');
+            document.getElementById('toastMessage').textContent = msg.text;
+            new bootstrap.Toast(toastEl, { delay: 4000 }).show();
+        }
+    }
+
+    // --- 2-hour gate ---
+    function isSessionAllowed(dtStr) {
+        return (new Date(dtStr) - new Date()) <= 2 * 60 * 60 * 1000;
+    }
+
+    // --- Session checkbox toggle ---
+    document.querySelectorAll('.session-check').forEach(cb => {
+        cb.addEventListener('change', function () {
+            if (this.checked && !isSessionAllowed(this.dataset.sessionDatetime)) {
+                this.checked = false;
+                alert('You can only enable a session within 2 hours of its start time.');
+                return;
+            }
+            const cells = document.querySelectorAll(`.attendance-cell[data-col-id="${this.dataset.colId}"]`);
+            if (this.checked) {
+                cells.forEach(cell => {
+                    cell.classList.remove('disabled');
+                    cell.classList.add('enabled');
+                    const inp = cell.querySelector('input[type="hidden"]');
+                    // auto-set PRESENT silently, do NOT trigger full-check here
+                    if (!inp.value) setStatus(cell, 'PRESENT');
+                });
+            } else {
+                cells.forEach(cell => {
+                    cell.classList.add('disabled');
+                    cell.classList.remove('enabled');
+                });
+            }
+            // Only check full after ALL session toggles settle
+            checkIfTableFull();
+        });
+    });
+
+    // --- Cell click (manual) ---
+    document.querySelectorAll('.attendance-cell').forEach(cell => {
+        cell.addEventListener('click', function () {
+            if (this.classList.contains('disabled')) return;
+            const inp = this.querySelector('input[type="hidden"]');
+            if (inp.value === 'PRESENT') {
+                setStatus(this, 'ABSENT');
+            } else if (inp.value === 'ABSENT') {
+                if (confirm('Mark this student as Present again?')) setStatus(this, 'PRESENT');
+            } else {
+                setStatus(this, 'PRESENT');
+            }
+            checkIfTableFull();
+        });
+    });
+
+    // setStatus: updates icon + value but does NOT call checkIfTableFull itself
+    function setStatus(cell, status) {
+        const inp = cell.querySelector('input[type="hidden"]');
+        const icon = cell.querySelector('.status-icon');
+        inp.value = status;
+        if (status === 'PRESENT') {
+            icon.innerHTML = '<i class="bi bi-check-circle-fill status-present"></i>';
+        } else if (status === 'ABSENT') {
+            icon.innerHTML = '<i class="bi bi-x-circle-fill status-absent"></i>';
+        } else {
+            icon.innerHTML = '<i class="bi bi-circle status-none"></i>';
+        }
+    }
+
+    // --- Full-table detection ---
+    // Banner only shows when ALL session columns are enabled AND every cell is marked
+    function checkIfTableFull() {
+        const totalSessions = document.querySelectorAll('.session-check').length;
+        const enabledSessions = document.querySelectorAll('.session-check:checked').length;
+
+        // All session columns must be checked first
+        if (totalSessions === 0 || enabledSessions < totalSessions) {
+            hideFull(); return;
+        }
+
+        // Then every enabled cell must have a value
+        const enabledCells = document.querySelectorAll('.attendance-cell.enabled');
+        const isFull = enabledCells.length > 0 &&
+            Array.from(enabledCells).every(c => c.querySelector('input[type="hidden"]').value !== '');
+
+        document.getElementById('tableFullBanner')?.classList.toggle('d-none', !isFull);
+        document.getElementById('resetTableBtn')?.classList.toggle('d-none', !isFull);
+    }
+
+    function hideFull() {
+        document.getElementById('tableFullBanner')?.classList.add('d-none');
+        document.getElementById('resetTableBtn')?.classList.add('d-none');
+    }
+
+    // --- Auto-enable columns with saved data ---
+    const preFilledCols = new Set();
+    document.querySelectorAll('.attendance-cell input[type="hidden"]').forEach(inp => {
+        if (inp.value) {
+            const cell = inp.closest('.attendance-cell');
+            if (cell) preFilledCols.add(cell.dataset.colId);
+        }
+    });
+    preFilledCols.forEach(colId => {
+        const cb = document.querySelector(`.session-check[data-col-id="${colId}"]`);
+        if (cb) { cb.checked = true; cb.dispatchEvent(new Event('change')); }
+    });
+    checkIfTableFull();
+});
+
+// --- Reset (frontend only, DB untouched) ---
+function resetAttendanceTable() {
+    if (!confirm('Clear the grid for new entries? Records already saved to the database are NOT affected.')) return;
+    document.querySelectorAll('.session-check').forEach(cb => {
+        if (cb.checked) { cb.checked = false; cb.dispatchEvent(new Event('change')); }
+    });
+    document.querySelectorAll('.attendance-cell input[type="hidden"]').forEach(inp => {
+        inp.value = '';
+        const icon = inp.closest('.attendance-cell')?.querySelector('.status-icon');
+        if (icon) icon.innerHTML = '<i class="bi bi-circle status-none"></i>';
+    });
+    document.getElementById('tableFullBanner')?.classList.add('d-none');
+    document.getElementById('resetTableBtn')?.classList.add('d-none');
+}
+</script>
+{% endblock %}

@@ -1,0 +1,160 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Create Timetable | Admin Portal{% endblock %}
+{% block portal_name %}Admin Portal{% endblock %}
+
+{% block sidebar %}
+{% include 'partials/sidebar_admin.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-12">
+        <div class="content-card">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="fw-bold mb-0">Create Timetable Grid</h4>
+                <a href="{% url 'manage_timetable' %}" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-arrow-left me-2"></i>Back
+                </a>
+            </div>
+
+            <form method="GET" class="mb-4 row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Course</label>
+                    <select name="course" class="form-select" onchange="this.form.submit()">
+                        <option value="">Select Course</option>
+                        {% for c in courses %}
+                        <option value="{{ c.id }}" {% if selected_course_id == c.id %}selected{% endif %}>{{ c.course_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Semester</label>
+                    <select name="semester" class="form-select" onchange="this.form.submit()">
+                        <option value="">Select Semester</option>
+                        {% for s in semesters %}
+                        <option value="{{ s.id }}" {% if selected_semester_id == s.id %}selected{% endif %}>Semester {{ s.semester_number }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </form>
+
+            {% if selected_semester_id %}
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="semester_id" value="{{ selected_semester_id }}">
+                <div class="table-responsive">
+                    <table class="table table-bordered text-center align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width: 10%;">Day</th>
+                                <th>9:00 - 10:00</th>
+                                <th>10:00 - 10:30</th>
+                                <th style="width: 50px;" class="bg-secondary text-white small vertical-text">Break</th>
+                                <th>11:00 - 12:00</th>
+                                <th>12:00 - 1:00</th>
+                                <th style="width: 50px;" class="bg-secondary text-white small vertical-text">Lunch</th>
+                                <th>2:00 - 3:00</th>
+                                <th>3:00 - 4:00</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for day in days %}
+                            <tr>
+                                <td class="fw-bold">{{ day }}</td>
+                                {% for slot in slots %}
+                                {% if slot.is_break %}
+                                <td class="bg-secondary"></td>
+                                {% else %}
+                                <td class="p-1">
+                                    <div class="d-flex flex-column gap-1">
+                                        <select name="subject_{{ day }}_{{ slot.start }}"
+                                            class="form-select form-select-sm" required>
+                                            <option value="NULL">-- Null --</option>
+                                            {% for sub in subjects %}
+                                            <option value="{{ sub.id }}">{{ sub.subject_name }} ({{ sub.subject_code }})</option>
+                                            {% endfor %}
+                                        </select>
+                                        <select name="teacher_{{ day }}_{{ slot.start }}"
+                                            class="form-select form-select-sm" data-day="{{ day }}"
+                                            data-start="{{ slot.start }}">
+                                            <option value="">-- Teacher --</option>
+                                            {% for t in teachers %}
+                                            <option value="{{ t.id }}">{{ t.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </td>
+                                {% endif %}
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="d-grid gap-2 mt-4">
+                    <button type="submit" class="btn btn-black"
+                        onclick="return confirm('This will overwrite existing timetable entries for this semester. Continue?')">Save
+                        Timetable</button>
+                </div>
+            </form>
+            {% else %}
+            <div class="alert alert-info">Please select a Course and Semester to create the timetable.</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .vertical-text {
+        writing-mode: vertical-lr;
+        text-orientation: mixed;
+        padding: 5px !important;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const subjectTeachersMap = {{ subject_teachers_map|safe }};
+        const allTeachers = [
+            {% for t in teachers %}
+            { id: "{{ t.id }}", name: "{{ t.name }}" },
+            {% endfor %}
+        ];
+
+        function updateTeachers(subjectSelect) {
+            const subjectId = subjectSelect.value;
+            const teacherSelect = subjectSelect.nextElementSibling;
+            
+            // Clear existing options
+            teacherSelect.innerHTML = '<option value="">-- Teacher --</option>';
+
+            if (subjectId === 'NULL' || !subjectId) {
+                return;
+            }
+
+            let availableTeachers = subjectTeachersMap[subjectId];
+
+            if (!availableTeachers || availableTeachers.length === 0) {
+                 // No teachers assigned
+            } else {
+                availableTeachers.forEach(teacher => {
+                    const option = document.createElement('option');
+                    option.value = teacher.id;
+                    option.textContent = teacher.name;
+                    teacherSelect.appendChild(option);
+                });
+            }
+        }
+
+        // Attach event listeners
+        document.querySelectorAll('select[name^="subject_"]').forEach(select => {
+            select.addEventListener('change', function () {
+                updateTeachers(this);
+            });
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Teacher Academics | Cruz Horizon{% endblock %}
+{% block portal_name %}Teacher Portal{% endblock %}
+
+{% block sidebar %}
+{% include 'partials/sidebar_teacher.html' %}
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
+    <div>
+        <h2 class="fw-bold mb-1">Academic Management</h2>
+        <p class="text-white-50">Upload and manage student marks</p>
+    </div>
+    <div>
+        <button class="btn btn-black"><i class="bi bi-upload me-2"></i>Upload Marks</button>
+    </div>
+</div>
+
+<!-- Upload Section -->
+<div class="content-card mb-4">
+    <h5 class="fw-bold mb-4">Upload Student Marks</h5>
+    <div class="row g-3 mb-4">
+        <div class="col-md-6">
+            <label class="form-label text-muted small fw-bold">Select Class</label>
+            <select class="form-select custom-input">
+                <option>Grade 10-A</option>
+                <option>Grade 10-B</option>
+                <option>Grade 12</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label text-muted small fw-bold">Select Subject</label>
+            <select class="form-select custom-input">
+                <option>Mathematics</option>
+                <option>Physics</option>
+                <option>Chemistry</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="mb-4">
+        <label class="form-label text-muted small fw-bold">Upload CSV File</label>
+        <div class="d-flex align-items-center border rounded p-2 bg-light bg-opacity-10"
+            style="border-color: var(--bs-border-color) !important;">
+            <input type="file" class="form-control border-0 bg-transparent shadow-none" id="fileUpload">
+        </div>
+    </div>
+
+    <button class="btn btn-black">Submit Marks</button>
+</div>
+
+<!-- Performance Table -->
+<div class="content-card">
+    <h5 class="fw-bold mb-4">Class Performance Overview</h5>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr class="text-muted small text-uppercase">
+                    <th class="fw-bold" style="background: transparent;">Student Name</th>
+                    <th class="fw-bold" style="background: transparent;">Roll No</th>
+                    <th class="fw-bold" style="background: transparent;">Midterm</th>
+                    <th class="fw-bold" style="background: transparent;">Final</th>
+                    <th class="fw-bold" style="background: transparent;">Total</th>
+                    <th class="fw-bold" style="background: transparent;">Grade</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="fw-medium">Alice Johnson</td>
+                    <td class="text-muted">001</td>
+                    <td>85</td>
+                    <td>92</td>
+                    <td>177</td>
+                    <td><span class="badge bg-black rounded-pill" style="min-width: 30px;">A</span></td>
+                </tr>
+                <tr>
+                    <td class="fw-medium">Bob Smith</td>
+                    <td class="text-muted">002</td>
+                    <td>78</td>
+                    <td>82</td>
+                    <td>160</td>
+                    <td><span class="badge badge-neutral rounded-pill" style="min-width: 30px;">B+</span></td>
+                </tr>
+                <tr>
+                    <td class="fw-medium">Carol Williams</td>
+                    <td class="text-muted">003</td>
+                    <td>90</td>
+                    <td>88</td>
+                    <td>178</td>
+                    <td><span class="badge bg-black rounded-pill" style="min-width: 30px;">A</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

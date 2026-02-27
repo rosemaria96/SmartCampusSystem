@@ -1,0 +1,37 @@
+<ul class="menu">
+    <li class="menu-item {% if request.resolver_match.url_name == 'student_dashboard' %}active{% endif %}"
+        onclick="window.location.href='{% url 'student_dashboard' %}'">
+        <i class="bi bi-grid-fill me-2"></i> Dashboard
+    </li>
+    <li class="menu-item {% if request.resolver_match.url_name == 'student_attendance' %}active{% endif %}"
+        onclick="window.location.href='{% url 'student_attendance' %}'">
+        <i class="bi bi-person-check me-2"></i> Attendance
+    </li>
+    <li class="menu-item {% if request.resolver_match.url_name == 'student_timetable' %}active{% endif %}"
+        onclick="window.location.href='{% url 'student_timetable' %}'">
+        <i class="bi bi-calendar-week me-2"></i> Timetable
+    </li>
+    <li class="menu-item {% if request.resolver_match.url_name == 'student_academics' %}active{% endif %}"
+        onclick="window.location.href='{% url 'student_academics' %}'">
+        <i class="bi bi-book me-2"></i> Academic
+    </li>
+    <li class="menu-item {% if request.resolver_match.url_name == 'student_notifications' %}active{% endif %}"
+        onclick="window.location.href='{% url 'student_notifications' %}'">
+        <i class="bi bi-bell me-2"></i> Notifications
+    </li>
+    <li class="menu-item {% if request.resolver_match.url_name == 'student_question_bank' %}active{% endif %}"
+        onclick="window.location.href='{% url 'student_question_bank' %}'">
+        <i class="bi bi-question-circle me-2"></i> Question Bank
+    </li>
+    <li class="menu-item {% if request.resolver_match.url_name == 'student_fee_payment' %}active{% endif %}"
+        onclick="window.location.href='{% url 'student_fee_payment' %}'">
+        <i class="bi bi-wallet2 me-2"></i> Fee Payment
+    </li>
+    <li class="menu-item {% if request.resolver_match.url_name == 'profile' %}active{% endif %}"
+        onclick="window.location.href='{% url 'profile' %}'">
+        <i class="bi bi-person-circle me-2"></i> Profile
+    </li>
+    <li class="menu-item text-danger mt-3" onclick="window.location.href='{% url 'logout' %}'">
+        <i class="bi bi-box-arrow-right me-2"></i> Logout
+    </li>
+</ul>

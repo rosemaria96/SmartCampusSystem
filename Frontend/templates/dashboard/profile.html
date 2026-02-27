@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Profile | Cruz Horizon{% endblock %}
+{% block portal_name %}
+{% if request.user.is_admin %}Admin Portal
+{% elif request.user.is_teacher %}Teacher Portal
+{% else %}Student Portal
+{% endif %}
+{% endblock %}
+
+{% block sidebar %}
+{% if request.user.is_admin %}
+{% include 'partials/sidebar_admin.html' %}
+{% elif request.user.is_teacher %}
+{% include 'partials/sidebar_teacher.html' %}
+{% else %}
+{% include 'partials/sidebar_student.html' %}
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="content-card">
+            <div class="text-center mb-4">
+                <div class="d-inline-block rounded-circle bg-light border p-1 mb-3">
+                    <div class="rounded-circle bg-white d-flex align-items-center justify-content-center"
+                        style="width: 100px; height: 100px; font-size: 2.5rem; color: #666;">
+                        {{ profile_user.name|first|upper }}
+                    </div>
+                </div>
+                <h3 class="fw-bold mb-1">{{ profile_user.name }}</h3>
+                <span
+                    class="badge {% if profile_user.is_admin %}badge-role-admin{% elif profile_user.is_teacher %}bg-success-subtle text-success{% else %}bg-primary-subtle text-primary{% endif %} rounded-pill px-3">
+                    {{ profile_user.get_role_display }}
+                </span>
+            </div>
+
+            <div class="card border-0 bg-light rounded-3 p-4">
+                <h5 class="fw-bold mb-3 border-bottom pb-2">Personal Details</h5>
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <label class="text-muted small">Username</label>
+                        <div class="fw-medium">{{ profile_user.username }}</div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="text-muted small">Email Address</label>
+                        <div class="fw-medium">{{ profile_user.email }}</div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="text-muted small">Date Joined</label>
+                        <div class="fw-medium">{{ profile_user.date_joined|date:"d F Y" }}</div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="text-muted small">Status</label>
+                        <div class="fw-medium">
+                            {% if profile_user.is_active %}
+                            <span class="text-success"><i class="bi bi-check-circle-fill me-1"></i>Active</span>
+                            {% else %}
+                            <span class="text-danger"><i class="bi bi-x-circle-fill me-1"></i>Inactive</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                {% if student_profile %}
+                <h5 class="fw-bold mb-3 mt-4 border-bottom pb-2">Academic Details</h5>
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <label class="text-muted small">Enrollment Number</label>
+                        <div class="fw-medium">{{ student_profile.enrollment_number }}</div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="text-muted small">Course</label>
+                        <div class="fw-medium">{{ student_profile.course.course_name }}</div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="text-muted small">Current Semester</label>
+                        <div class="fw-medium">Semester {{ student_profile.semester.semester_number }}</div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if assigned_subjects %}
+                <h5 class="fw-bold mb-3 mt-4 border-bottom pb-2">Subjects Taught</h5>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Subject Name</th>
+                                <th>Code</th>
+                                <th>Course</th>
+                                <th>Semester</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for assignment in assigned_subjects %}
+                            <tr>
+                                <td class="fw-medium text-black">{{ assignment.subject.subject_name }}</td>
+                                <td class="text-black">{{ assignment.subject.subject_code }}</td>
+                                <td class="text-black">{{ assignment.subject.semester.course.course_name }}</td>
+                                <td class="text-black">Semester {{ assignment.subject.semester.semester_number }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% endif %}
+            </div>
+
+            {% if request.user.is_admin or request.user == profile_user %}
+            <div class="d-flex justify-content-end mt-4">
+                {% if request.user.is_admin %}
+                <a href="/admin/django/users/user/{{ profile_user.id }}/change/" target="_blank"
+                    class="btn btn-outline-dark">
+                    <i class="bi bi-pencil me-2"></i>Edit in Database
+                </a>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+=== DIAGNOSING STUDENT FEE VISIBILITY ===
+
+Total STUDENT users: 3
+
+User: msccs2519 (Nandana M)
+  Role: STUDENT
+  ✗ Error: 'Student' object has no attribute 'id'
+
+User: msccs2524 (Richard Roy)
+  Role: STUDENT
+  ✗ Error: 'Student' object has no attribute 'id'
+
+User: msccs2523 (Ragendhu)
+  Role: STUDENT
+  ✗ Error: 'Student' object has no attribute 'id'
+
+
+=== ALL STUDENT FEE RECORDS ===
+Total StudentFee records in DB: 3
+  Fee ID: 11, Student: msccs2519, Amount: ₹90000.00, Status: PENDING
+  Fee ID: 12, Student: msccs2524, Amount: ₹90000.00, Status: PENDING
+  Fee ID: 13, Student: msccs2523, Amount: ₹90000.00, Status: PENDING
