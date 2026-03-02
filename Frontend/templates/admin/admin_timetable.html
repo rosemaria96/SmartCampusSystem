@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Admin Timetable | Cruz Horizon{% endblock %}
+{% block portal_name %}Admin Portal{% endblock %}
+
+{% block sidebar %}
+{% include 'partials/sidebar_admin.html' %}
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
+    <div>
+        <h2 class="fw-bold mb-1">Master Timetable</h2>
+        <p class="text-white-50">Manage and publish timetables</p>
+    </div>
+    <div>
+        <button class="btn btn-outline-secondary me-2"><i class="bi bi-calendar me-2"></i>This Week</button>
+        <button class="btn btn-black"><i class="bi bi-download me-2"></i>Export PDF</button>
+    </div>
+</div>
+
+<!-- Timetable Management -->
+<div class="content-card mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 class="fw-bold mb-0">Class Timetables</h5>
+        <div>
+            <a href="{% url 'create_timetable_grid' %}" class="btn btn-black me-2"><i
+                    class="bi bi-grid-3x3 me-2"></i>Create Grid</a>
+            <a href="{% url 'add_timetable' %}" class="btn btn-outline-dark"><i class="bi bi-plus-lg me-2"></i>Add
+                Entry</a>
+        </div>
+    </div>
+
+    <!-- Filter -->
+    <form method="GET" class="mb-4 d-flex gap-2 align-items-end">
+        <div>
+            <label class="small text-muted mb-1">Semester</label>
+            <select name="semester" class="form-select form-select-sm" style="width: 200px;"
+                onchange="this.form.submit()">
+                <option value="">All Semesters</option>
+                {% for semester in semesters %}
+                <option value="{{ semester.id }}" {% if selected_semester_id == semester.id %}selected{% endif %}>
+                    Semester {{ semester.semester_number }} - {{ semester.course.course_name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr class="text-muted small text-uppercase">
+                    <th class="ps-3">Day</th>
+                    <th>Time</th>
+                    <th>Subject</th>
+                    <th>Teacher</th>
+                    <th>Class</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in timetables %}
+                <tr>
+                    <td class="fw-medium ps-3">{{ entry.day_of_week|title }}</td>
+                    <td>{{ entry.start_time|time:"H:i" }} - {{ entry.end_time|time:"H:i" }}</td>
+                    <td class="fw-bold">{{ entry.subject.subject_name }}</td>
+                    <td>{{ entry.teacher.name }}</td>
+                    <td>{{ entry.semester.course.course_name }} (Sem {{ entry.semester.semester_number }})</td>
+                    <td class="text-end">
+                        <a href="{% url 'edit_timetable' entry.id %}" class="btn btn-link action-btn-color p-1"><i
+                                class="bi bi-pencil-square"></i></a>
+                        <a href="{% url 'delete_timetable' entry.id %}" class="btn btn-link text-danger p-1"
+                            onclick="return confirm('Are you sure?')"><i class="bi bi-trash"></i></a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted py-4">No timetable entries found. Select a semester or
+                        add new entries.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

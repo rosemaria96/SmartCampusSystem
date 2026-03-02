@@ -1,0 +1,70 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Fee Payment | Cruz Horizon{% endblock %}
+{% block portal_name %}Student Portal{% endblock %}
+
+{% block sidebar %}
+{% include 'partials/sidebar_student.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-end mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">Fee Payment</h2>
+        <p class="text-white-50">Manage your tuition and other fees</p>
+    </div>
+</div>
+
+<div class="content-card">
+    <h5 class="fw-bold mb-4">My Fee Records</h5>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr class="text-muted small text-uppercase">
+                    <th class="ps-3">Fee Type</th>
+                    <th>Course</th>
+                    <th>Semester</th>
+                    <th>Amount</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for fee in student_fees %}
+                <tr>
+                    <td class="fw-bold ps-3">Tuition Fee</td>
+                    <td>{{ fee.fee_structure.course.course_name }}</td>
+                    <td>Semester {{ fee.fee_structure.semester.semester_number }}</td>
+                    <td class="fw-bold text-success">&#8377;{{ fee.payable_amount }}</td>
+                    <td>{{ fee.fee_structure.due_date|date:"M d, Y" }}</td>
+                    <td>
+                        {% if fee.status == 'PAID' %}
+                        <span class="badge bg-success">Paid</span>
+                        {% else %}
+                        <span class="badge bg-warning text-dark">{{ fee.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-end">
+                        {% if fee.status == 'PENDING' %}
+                        <form method="POST" style="display:inline;" onsubmit="return confirm('Confirm payment of &#8377;{{ fee.payable_amount }}?');">
+                            {% csrf_token %}
+                            <input type="hidden" name="fee_id" value="{{ fee.id }}">
+                            <button type="submit" class="btn btn-sm btn-black">Pay Now</button>
+                        </form>
+                        {% else %}
+                        <span class="text-success small"><i class="bi bi-check-circle-fill"></i> Paid</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted py-4">No fee records found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

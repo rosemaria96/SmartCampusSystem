@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Attendance | Cruz Horizon{% endblock %}
+{% block portal_name %}Student Portal{% endblock %}
+
+{% block sidebar %}
+{% include 'partials/sidebar_student.html' %}
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="mb-4">
+    <h2 class="fw-bold mb-1">My Attendance</h2>
+    <p class="text-white-50">View your attendance records and statistics</p>
+</div>
+
+<!-- Stats Cards Row -->
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="stat-card text-center">
+            <p class="text-muted mb-2">Overall Attendance</p>
+            <h1 class="fw-bold text-primary mb-3 display-4">{{ attendance_rate }}%</h1>
+            <div class="progress mb-2" style="height: 10px;">
+                <div class="progress-bar bg-primary" role="progressbar" style="width: {{ attendance_rate }}%"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card text-center">
+            <p class="text-muted mb-2">Classes Attended</p>
+            <h1 class="fw-bold text-success mb-2 display-4">{{ present_classes }}</h1>
+            <p class="text-muted small">out of {{ total_classes }} classes</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card text-center">
+            <p class="text-muted mb-2">Absent Days</p>
+            <h1 class="fw-bold text-danger mb-2 display-4">{{ absent_classes }}</h1>
+            <p class="text-muted small">this semester</p>
+        </div>
+    </div>
+</div>
+
+<!-- Attendance Trend Chart -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="content-card">
+            <h5 class="fw-bold mb-4">Attendance Trend</h5>
+            <div style="height: 300px; width: 100%;">
+                <canvas id="attendanceChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Attendance Records -->
+<div class="row">
+    <div class="col-12">
+        <div class="content-card">
+            <h5 class="fw-bold mb-4">Recent Attendance Records</h5>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle custom-table">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-muted small text-uppercase">Date</th>
+                            <th scope="col" class="text-muted small text-uppercase">Subject</th>
+                            <th scope="col" class="text-muted small text-uppercase text-end">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="border-top-0">
+                        {% for record in attendance_records %}
+                        <tr>
+                            <td>{{ record.date }}</td>
+                            <td>{{ record.subject.subject_name }}</td>
+                            <td class="text-end">
+                                {% if record.status == 'PRESENT' %}
+                                <span class="badge badge-presence-present">Present</span>
+                                {% elif record.status == 'ABSENT' %}
+                                <span class="badge badge-presence-absent">Absent</span>
+                                {% else %}
+                                <span class="badge bg-warning text-dark">{{ record.status|title }}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center py-4 text-muted">No attendance records found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const ctx = document.getElementById('attendanceChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [{
+                label: 'Attendance %',
+                data: [98, 95, 99, 97, 98, 96],
+                borderColor: '#3b82f6',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { beginAtZero: true, max: 100 },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+</script>
+{% endblock %}

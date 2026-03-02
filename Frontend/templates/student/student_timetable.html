@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Timetable | Cruz Horizon{% endblock %}
+{% block portal_name %}Student Portal{% endblock %}
+
+{% block sidebar %}
+{% include 'partials/sidebar_student.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
+    <div>
+        <h2 class="fw-bold mb-1">My Timetable</h2>
+        <p class="text-white-50">Class Schedule for {{ request.user.student_profile.semester }}</p>
+    </div>
+    <div>
+        <button class="btn btn-black"><i class="bi bi-download me-2"></i>Export PDF</button>
+    </div>
+</div>
+
+<div class="content-card mb-4">
+    <div class="table-responsive">
+        <table class="table table-bordered text-center align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col" style="width: 100px;">Day</th>
+                    <th scope="col">9:00 - 10:00</th>
+                    <th scope="col">10:00 - 10:30</th>
+                    <th scope="col" class="bg-light text-muted" style="width: 20px;">Break</th>
+                    <th scope="col">11:00 - 12:00</th>
+                    <th scope="col">12:00 - 1:00</th>
+                    <th scope="col" class="bg-light text-muted" style="width: 20px;">Lunch</th>
+                    <th scope="col">2:00 - 3:00</th>
+                    <th scope="col">3:00 - 4:00</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in timetable_grid %}
+                <tr>
+                    <td class="fw-bold table-light text-dark">{{ row.day|title }}</td>
+                    {% for slot in row.slots %}
+                    {% if slot.type == 'break' %}
+                    <td class="bg-secondary bg-opacity-10 py-0" style="width: 20px;">
+                        <div style="writing-mode: vertical-rl; text-orientation: mixed; height: 60px; margin: auto;"
+                            class="text-muted small text-uppercase spacing-1">{{ slot.label }}</div>
+                    </td>
+                    {% else %}
+                    <td class="p-1">
+                        {% if slot.entry %}
+                        <div class="p-2 rounded bg-primary bg-opacity-10 border border-primary border-opacity-25 h-100">
+                            <div class="fw-bold small text-primary">{{ slot.entry.subject.subject_name }}</div>
+                            <div class="text-muted" style="font-size: 0.75rem;">{{ slot.entry.subject.subject_code }}
+                            </div>
+                            <div class="text-dark small mt-1">{{ slot.entry.teacher.name }}</div>
+                        </div>
+                        {% else %}
+                        <span class="text-muted opacity-25">-</span>
+                        {% endif %}
+                    </td>
+                    {% endif %}
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

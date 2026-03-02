@@ -1,0 +1,41 @@
+<ul class="menu">
+    <li class="menu-item {% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}"
+        onclick="window.location.href='{% url 'admin_dashboard' %}'">
+        <i class="bi bi-grid-fill me-2"></i> Dashboard
+    </li>
+    <li class="menu-item {% if request.resolver_match.url_name == 'attendance_reports' %}active{% endif %}"
+        onclick="window.location.href='{% url 'attendance_reports' %}'">
+        <i class="bi bi-person-check me-2"></i> Attendance
+    </li>
+    <li class="menu-item {% if request.resolver_match.url_name == 'manage_timetable' %}active{% endif %}"
+        onclick="window.location.href='{% url 'manage_timetable' %}'">
+        <i class="bi bi-calendar-week me-2"></i> Timetable
+    </li>
+    <li class="menu-item {% if request.resolver_match.url_name == 'manage_academics' %}active{% endif %}"
+        onclick="window.location.href='{% url 'manage_academics' %}'">
+        <i class="bi bi-book me-2"></i> Academic
+    </li>
+    <li class="menu-item {% if request.resolver_match.url_name == 'admin_notifications' %}active{% endif %}"
+        onclick="window.location.href='{% url 'admin_notifications' %}'">
+        <i class="bi bi-bell me-2"></i> Notifications
+    </li>
+    <li class="menu-item {% if request.resolver_match.url_name == 'manage_question_papers' %}active{% endif %}"
+        onclick="window.location.href='{% url 'manage_question_papers' %}'">
+        <i class="bi bi-file-earmark-text me-2"></i> Question Bank
+    </li>
+    <li class="menu-item {% if request.resolver_match.url_name == 'manage_fees' %}active{% endif %}"
+        onclick="window.location.href='{% url 'manage_fees' %}'">
+        <i class="bi bi-credit-card me-2"></i> Fee Payment
+    </li>
+    <li class="menu-item {% if request.resolver_match.url_name == 'user_management' or request.resolver_match.url_name == 'create_user' %}active{% endif %}"
+        onclick="window.location.href='{% url 'user_management' %}'">
+        <i class="bi bi-people me-2"></i> User Management
+    </li>
+    <li class="menu-item {% if request.resolver_match.url_name == 'profile' %}active{% endif %}"
+        onclick="window.location.href='{% url 'profile' %}'">
+        <i class="bi bi-person-circle me-2"></i> Profile
+    </li>
+    <li class="menu-item text-danger mt-3" onclick="window.location.href='{% url 'logout' %}'">
+        <i class="bi bi-box-arrow-right me-2"></i> Logout
+    </li>
+</ul>

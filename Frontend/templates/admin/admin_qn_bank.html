@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Question Bank Management | Cruz Horizon{% endblock %}
+{% block portal_name %}Admin Portal{% endblock %}
+
+{% block sidebar %}
+{% include 'partials/sidebar_admin.html' %}
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-end mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">Question Bank</h2>
+        <p class="text-white-50">Review and approve question papers</p>
+    </div>
+</div>
+
+<!-- Question Bank Management -->
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="content-card">
+            <h5 class="fw-bold mb-4">Upload Question Paper</h5>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label small text-muted">Subject</label>
+                    <select name="subject" class="form-select" required>
+                        <option value="">Select Subject</option>
+                        {% for subject in subjects %}
+                        <option value="{{ subject.id }}">{{ subject.subject_name }} ({{ subject.subject_code }})
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label small text-muted">Exam Year</label>
+                    <input type="number" name="exam_year" class="form-control" placeholder="e.g. 2024" required>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label small text-muted">PDF File</label>
+                    <input type="file" name="pdf_file" class="form-control" accept=".pdf" required>
+                </div>
+                <button type="submit" class="btn btn-black w-100">Upload Paper</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="content-card h-100">
+            <h5 class="fw-bold mb-4">Available Question Papers</h5>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr class="text-muted small text-uppercase">
+                            <th class="ps-3">Subject</th>
+                            <th>Year</th>
+                            <th>Uploaded By</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for paper in question_papers %}
+                        <tr>
+                            <td class="fw-bold ps-3">{{ paper.subject.subject_name }}</td>
+                            <td>{{ paper.exam_year }}</td>
+                            <td class="text-muted small">{{ paper.uploaded_by.name }}</td>
+                            <td class="text-end">
+                                {% if paper.pdf_path %}
+                                <a href="{{ paper.pdf_path.url }}" class="btn btn-sm btn-outline-secondary" download><i
+                                        class="bi bi-download"></i></a>
+                                {% else %}
+                                <button class="btn btn-sm btn-outline-secondary" disabled><i
+                                        class="bi bi-download"></i></button>
+                                {% endif %}
+                                <a href="/admin/django/assessments/questionpaper/{{ paper.id }}/change/"
+                                    class="btn btn-sm btn-outline-danger ms-1" target="_blank"><i
+                                        class="bi bi-pencil"></i></a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center text-muted py-4">No question papers uploaded yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

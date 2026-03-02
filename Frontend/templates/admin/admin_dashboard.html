@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Admin Dashboard | Cruz Horizon{% endblock %}
+{% block portal_name %}Admin Portal{% endblock %}
+
+{% block sidebar %}
+{% include 'partials/sidebar_admin.html' %}
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="mb-4">
+    <h2 class="fw-bold mb-1">Admin Dashboard</h2>
+    <p class="text-white-50">Welcome back! Here's what's happening today.</p>
+</div>
+
+<!-- Summary Stats -->
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+        <div class="stat-card admin-card p-3 rounded-3 d-flex justify-content-between align-items-center">
+            <div>
+                <div class="text-muted small mb-1">Total Students</div>
+                <h3 class="fw-bold mb-1">{{ total_students }}</h3>
+                <div class="small text-success"><i class="bi bi-arrow-up-short"></i> 12% from last month</div>
+            </div>
+            <div class="stat-icon-wrapper" style="background-color: #eff6ff; color: #3b82f6;">
+                <i class="bi bi-people"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="stat-card admin-card p-3 rounded-3 d-flex justify-content-between align-items-center">
+            <div>
+                <div class="text-muted small mb-1">Total Teachers</div>
+                <h3 class="fw-bold mb-1">{{ total_teachers }}</h3>
+                <div class="small text-success"><i class="bi bi-arrow-up-short"></i> 3% from last month</div>
+            </div>
+            <div class="stat-icon-wrapper" style="background-color: #f0fdf4; color: #22c55e;">
+                <i class="bi bi-mortarboard"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="stat-card admin-card p-3 rounded-3 d-flex justify-content-between align-items-center">
+            <div>
+                <div class="text-muted small mb-1">Total Departments</div>
+                <h3 class="fw-bold mb-1">{{ total_departments }}</h3>
+                <div class="small text-danger"><i class="bi bi-arrow-down-short"></i> 2% from last week</div>
+            </div>
+            <div class="stat-icon-wrapper" style="background-color: #fcf4ff; color: #a855f7;">
+                <i class="bi bi-person-check"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="stat-card admin-card p-3 rounded-3 d-flex justify-content-between align-items-center">
+            <div>
+                <div class="text-muted small mb-1">Total Courses</div>
+                <h3 class="fw-bold mb-1">{{ total_courses }}</h3>
+                <div class="small text-success"><i class="bi bi-arrow-up-short"></i> 8% from last month</div>
+            </div>
+            <div class="stat-icon-wrapper" style="background-color: #fff7ed; color: #f97316;">
+                <i class="bi bi-currency-dollar"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Section -->
+<div class="row g-4 mb-4">
+    <div class="col-md-6">
+        <div class="content-card h-100">
+            <h6 class="fw-bold mb-3">Attendance Overview</h6>
+            <div class="chart-container">
+                <canvas id="attendanceChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="content-card h-100">
+            <h6 class="fw-bold mb-3">Average Performance by Subject</h6>
+            <div class="chart-container">
+                <canvas id="performanceChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bottom Section -->
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="content-card h-100">
+            <h6 class="fw-bold mb-4">Recent Activities</h6>
+            <div class="activity-item">
+                <div class="activity-icon text-primary bg-primary bg-opacity-10"><i class="bi bi-person-plus"></i></div>
+                <div>
+                    <div class="fw-bold small">New student enrollment</div>
+                    <div class="text-muted small">by Admin • 2 hours ago</div>
+                </div>
+            </div>
+            <div class="activity-item">
+                <div class="activity-icon text-success bg-success bg-opacity-10"><i class="bi bi-currency-dollar"></i>
+                </div>
+                <div>
+                    <div class="fw-bold small">Fee payment received</div>
+                    <div class="text-muted small">by John Doe • 3 hours ago</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="content-card h-100">
+            <h6 class="fw-bold mb-4">Quick Actions</h6>
+            <div class="row g-3">
+                <div class="col-6">
+                    <div class="quick-action-card">
+                        <div class="quick-action-icon text-primary"><i class="bi bi-person-add"></i></div>
+                        <div class="fw-bold small">Add User</div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="quick-action-card">
+                        <div class="quick-action-icon text-success"><i class="bi bi-calendar-plus"></i></div>
+                        <div class="fw-bold small">Schedule Event</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const ctxAttendance = document.getElementById('attendanceChart').getContext('2d');
+        const ctxPerformance = document.getElementById('performanceChart').getContext('2d');
+
+        const isLight = document.body.classList.contains('light-mode');
+        const gridColor = isLight ? '#f1f5f9' : '#374151';
+        const tickColor = isLight ? '#64748b' : '#9ca3af';
+
+        new Chart(ctxAttendance, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Attendance %',
+                    data: [95, 93, 98, 96, 97, 95],
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, max: 100, grid: { color: gridColor }, ticks: { color: tickColor } },
+                    x: { grid: { display: false }, ticks: { color: tickColor } }
+                }
+            }
+        });
+
+        new Chart(ctxPerformance, {
+            type: 'bar',
+            data: {
+                labels: ['Math', 'Science', 'English', 'History', 'Physics'],
+                datasets: [{
+                    label: 'Average Score',
+                    data: [85, 78, 92, 88, 82],
+                    backgroundColor: '#10b981',
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, max: 100, grid: { color: gridColor }, ticks: { color: tickColor } },
+                    x: { grid: { display: false }, ticks: { color: tickColor } }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

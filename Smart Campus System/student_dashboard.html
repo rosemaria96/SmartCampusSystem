@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Student Dashboard | Campus Pro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="d-flex app-layout">
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+
+            <!-- Logo -->
+            <div class="sidebar-logo">
+                <img src="logo.png" alt="Cruz Horizon Logo" style="width: 40px; height: auto;">
+                <div class="ms-2">
+                    <div class="fw-bold fs-5 logo-text">Cruz Horizon</div>
+                    <div class="logo-subtitle" style="font-size: 0.8rem;">Student Portal</div>
+                </div>
+            </div>
+
+            <ul class="menu">
+                <li class="menu-item active" onclick="window.location.href='student_dashboard.html'"><i
+                        class="bi bi-grid-fill me-2"></i> Dashboard</li>
+                <li class="menu-item" onclick="window.location.href='student_attendance.html'"><i
+                        class="bi bi-person-check me-2"></i> Attendance</li>
+                <li class="menu-item" onclick="window.location.href='student_timetable.html'"><i
+                        class="bi bi-calendar-week me-2"></i> Timetable</li>
+                <li class="menu-item" onclick="window.location.href='student_academics.html'"><i
+                        class="bi bi-book me-2"></i> Academic</li>
+                <li class="menu-item" onclick="window.location.href='student_notifications.html'"><i
+                        class="bi bi-bell me-2"></i> Notifications</li>
+                <li class="menu-item" onclick="window.location.href='student_question_bank.html'"><i
+                        class="bi bi-question-circle me-2"></i> Question Bank</li>
+                <li class="menu-item" onclick="window.location.href='student_fee_payment.html'"><i
+                        class="bi bi-wallet2 me-2"></i> Fee Payment</li>
+                <li class="menu-item text-danger mt-3" onclick="window.location.href='index.html'"><i
+                        class="bi bi-box-arrow-right me-2"></i> Logout</li>
+            </ul>
+
+            <!-- User Profile in Sidebar (Bottom) -->
+            <div class="mt-auto pt-4 border-top border-secondary">
+                <div class="d-flex align-items-center profile-text">
+                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center"
+                        style="width: 40px; height: 40px;">
+                        J
+                    </div>
+                    <div class="ms-2">
+                        <div class="fw-bold" style="font-size: 0.9rem;">John Doe</div>
+                        <div class="text-muted-custom" style="font-size: 0.75rem;">john@example.com</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+
+            <!-- Top Navbar -->
+            <div class="topbar mb-4">
+                <!-- Search -->
+                <div class="search-bar flex-grow-1 me-4">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-0"><i class="bi bi-search"></i></span>
+                        <input type="text" class="form-control border-0" placeholder="Search...">
+                    </div>
+                </div>
+
+                <div class="topbar-actions align-items-center">
+                    <button id="toggleBtn" class="toggle-btn me-2"><i class="bi bi-moon-fill"></i></button>
+                    <div class="position-relative me-3">
+                        <i class="bi bi-bell fs-5"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                            style="font-size: 0.6rem;">3</span>
+                    </div>
+                    <div class="rounded-circle border border-2 border-primary p-1">
+                        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold"
+                            style="width: 32px; height: 32px;">J</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page Header -->
+            <div class="mb-4">
+                <h2 class="fw-bold mb-1">Student Dashboard</h2>
+                <p class="text-white-50">Welcome back! Here's your overview for today.</p>
+            </div>
+
+            <!-- Overview Stats Cards -->
+            <div class="row g-4 mb-4">
+                <!-- Attendance -->
+                <div class="col-md-3">
+                    <div class="stat-card d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-muted mb-1 fs-6">Attendance Rate</p>
+                            <h3 class="fw-bold mb-1">94.5%</h3>
+                            <small class="text-success"><i class="bi bi-arrow-up"></i> 2% from last month</small>
+                        </div>
+                        <div class="icon-box bg-primary-subtle text-primary rounded p-2">
+                            <i class="bi bi-calendar-check fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Courses -->
+                <div class="col-md-3">
+                    <div class="stat-card d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-muted mb-1 fs-6">Active Courses</p>
+                            <h3 class="fw-bold mb-1">8</h3>
+                        </div>
+                        <div class="icon-box bg-success-subtle text-success rounded p-2">
+                            <i class="bi bi-book fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GPA -->
+                <div class="col-md-3">
+                    <div class="stat-card d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-muted mb-1 fs-6">GPA</p>
+                            <h3 class="fw-bold mb-1">3.8</h3>
+                            <small class="text-success"><i class="bi bi-arrow-up"></i> 0.2 from last semester</small>
+                        </div>
+                        <div class="icon-box bg-info-subtle text-info rounded p-2">
+                            <i class="bi bi-trophy fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending Tasks -->
+                <div class="col-md-3">
+                    <div class="stat-card d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-muted mb-1 fs-6">Pending Tasks</p>
+                            <h3 class="fw-bold mb-1">5</h3>
+                        </div>
+                        <div class="icon-box bg-warning-subtle text-warning rounded p-2">
+                            <i class="bi bi-clock-history fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4 mb-4">
+                <!-- Today's Classes -->
+                <div class="col-md-6">
+                    <div class="content-card h-100">
+                        <h5 class="fw-bold mb-3">Today's Classes</h5>
+
+                        <!-- Class Item -->
+                        <div class="class-item card p-3 mb-3 border-0 shadow-sm">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="fw-bold mb-0">Mathematics</h6>
+                                <span class="badge badge-themed">10:30 AM</span>
+                            </div>
+                            <div class="text-muted small">Dr. Smith</div>
+                            <div class="text-danger small"><i class="bi bi-geo-alt-fill"></i> Room 201</div>
+                        </div>
+
+                        <!-- Class Item -->
+                        <div class="class-item card p-3 mb-3 border-0 shadow-sm">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="fw-bold mb-0">Physics</h6>
+                                <span class="badge badge-themed">12:00 PM</span>
+                            </div>
+                            <div class="text-muted small">Prof. Johnson</div>
+                            <div class="text-danger small"><i class="bi bi-geo-alt-fill"></i> Lab 2</div>
+                        </div>
+
+                        <!-- Class Item -->
+                        <div class="class-item card p-3 mb-0 border-0 shadow-sm">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="fw-bold mb-0">English</h6>
+                                <span class="badge badge-themed">2:00 PM</span>
+                            </div>
+                            <div class="text-muted small">Ms. Williams</div>
+                            <div class="text-danger small"><i class="bi bi-geo-alt-fill"></i> Room 105</div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Pending Assignments -->
+                <div class="col-md-6">
+                    <div class="content-card h-100">
+                        <h5 class="fw-bold mb-3">Pending Assignments</h5>
+
+                        <!-- Assignment Item -->
+                        <div class="assignment-item card p-3 mb-3 border-0 shadow-sm">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="fw-bold mb-1">Lab Report</h6>
+                                    <div class="text-muted small">Chemistry</div>
+                                    <small class="text-secondary">Due: Today</small>
+                                </div>
+                                <span class="badge bg-danger align-self-start">Due</span>
+                            </div>
+                        </div>
+
+                        <!-- Assignment Item -->
+                        <div class="assignment-item card p-3 mb-3 border-0 shadow-sm">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="fw-bold mb-1">Essay on World War II</h6>
+                                    <div class="text-muted small">History</div>
+                                    <small class="text-secondary">Due: Tomorrow</small>
+                                </div>
+                                <span class="badge badge-inprogress align-self-start">In Progress</span>
+                            </div>
+                        </div>
+
+                        <!-- Assignment Item -->
+                        <div class="assignment-item card p-3 mb-0 border-0 shadow-sm">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="fw-bold mb-1">Chapter 7 Problems</h6>
+                                    <div class="text-muted small">Mathematics</div>
+                                    <small class="text-secondary">Due: In 3 days</small>
+                                </div>
+                                <span class="badge badge-notstarted border align-self-start">Not Started</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Row -->
+            <div class="row g-4">
+                <!-- Course Progress -->
+                <div class="col-md-6">
+                    <div class="content-card h-100">
+                        <h5 class="fw-bold mb-4">Course Progress</h5>
+
+                        <!-- Progress Item -->
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span class="fw-bold small">Mathematics</span>
+                                <span class="text-muted small">75%</span>
+                            </div>
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar bg-black" style="width: 75%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Progress Item -->
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span class="fw-bold small">Physics</span>
+                                <span class="text-muted small">68%</span>
+                            </div>
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar bg-black" style="width: 68%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Progress Item -->
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span class="fw-bold small">Chemistry</span>
+                                <span class="text-muted small">82%</span>
+                            </div>
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar bg-black" style="width: 82%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Progress Item -->
+                        <div class="mb-0">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span class="fw-bold small">English</span>
+                                <span class="text-muted small">90%</span>
+                            </div>
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar bg-black" style="width: 90%"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Recent Grades -->
+                <div class="col-md-6">
+                    <div class="content-card h-100">
+                        <h5 class="fw-bold mb-3">Recent Grades</h5>
+
+                        <div class="list-group list-group-flush">
+                            <div
+                                class="list-group-item bg-transparent d-flex justify-content-between align-items-center py-3 border-bottom">
+                                <div>
+                                    <div class="fw-bold">Mathematics</div>
+                                    <div class="text-muted small">Mid-term Exam</div>
+                                </div>
+                                <div class="text-end">
+                                    <div class="fw-bold text-primary fs-5">A</div>
+                                    <div class="text-muted small">92/100</div>
+                                </div>
+                            </div>
+
+                            <div
+                                class="list-group-item bg-transparent d-flex justify-content-between align-items-center py-3 border-bottom">
+                                <div>
+                                    <div class="fw-bold">Physics</div>
+                                    <div class="text-muted small">Quiz 5</div>
+                                </div>
+                                <div class="text-end">
+                                    <div class="fw-bold text-primary fs-5">B+</div>
+                                    <div class="text-muted small">87/100</div>
+                                </div>
+                            </div>
+
+                            <div
+                                class="list-group-item bg-transparent d-flex justify-content-between align-items-center py-3">
+                                <div>
+                                    <div class="fw-bold">Chemistry</div>
+                                    <div class="text-muted small">Lab Report 3</div>
+                                </div>
+                                <div class="text-end">
+                                    <div class="fw-bold text-primary fs-5">A-</div>
+                                    <div class="text-muted small">90/100</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

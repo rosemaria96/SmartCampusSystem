@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Student Dashboard | Cruz Horizon{% endblock %}
+{% block portal_name %}Student Portal{% endblock %}
+
+{% block sidebar %}
+{% include 'partials/sidebar_student.html' %}
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="mb-4">
+    <h2 class="fw-bold mb-1">Student Dashboard</h2>
+    <p class="text-white-50">Welcome back! Here's your overview for today.</p>
+</div>
+
+<!-- Overview Stats Cards -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="stat-card d-flex justify-content-between align-items-start">
+            <div>
+                <p class="text-muted mb-1 fs-6">Attendance Rate</p>
+                <h3 class="fw-bold mb-1">{{ attendance_rate }}%</h3>
+            </div>
+            <div class="icon-box bg-primary-subtle text-primary rounded p-2">
+                <i class="bi bi-calendar-check fs-4"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card d-flex justify-content-between align-items-start">
+            <div>
+                <p class="text-muted mb-1 fs-6">Total Classes</p>
+                <h3 class="fw-bold mb-1">{{ total_classes }}</h3>
+            </div>
+            <div class="icon-box bg-success-subtle text-success rounded p-2">
+                <i class="bi bi-book fs-4"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card d-flex justify-content-between align-items-start">
+            <div>
+                <p class="text-muted mb-1 fs-6">Present</p>
+                <h3 class="fw-bold mb-1">{{ present_classes }}</h3>
+            </div>
+            <div class="icon-box bg-info-subtle text-info rounded p-2">
+                <i class="bi bi-check-circle fs-4"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card d-flex justify-content-between align-items-start">
+            <div>
+                <p class="text-muted mb-1 fs-6">Notifications</p>
+                <h3 class="fw-bold mb-1">{{ notifications.count }}</h3>
+            </div>
+            <div class="icon-box bg-warning-subtle text-warning rounded p-2">
+                <i class="bi bi-bell fs-4"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-6">
+        <div class="content-card h-100">
+            <h5 class="fw-bold mb-3">Attendance Overview</h5>
+            <div class="d-flex align-items-center justify-content-center h-75">
+                <div class="text-center">
+                    <h1 class="display-1 fw-bold text-primary">{{ attendance_rate }}<span class="fs-4">%</span></h1>
+                    <p class="text-muted">Overall Attendance</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="content-card h-100">
+            <h5 class="fw-bold mb-3">Recent Notifications</h5>
+            {% for notification in notifications %}
+            <div class="assignment-item card p-3 mb-3 border-0 shadow-sm">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="fw-bold mb-1">{{ notification.message }}</h6>
+                        <small class="text-secondary">{{ notification.created_at|timesince }} ago</small>
+                    </div>
+                    {% if not notification.is_read %}
+                    <span class="badge bg-danger align-self-start">New</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-muted">No recent notifications.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
